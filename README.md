@@ -445,8 +445,7 @@ e rodar todas as células.
 
 ## 5. Resultado
 
-**21 de 21 passaram.** Em todos esses comportamentos, o motor devolveu o mesmo
-número da conta que eu fiz na mão.
+**21 de 21 passaram.**
 
 ---
 
