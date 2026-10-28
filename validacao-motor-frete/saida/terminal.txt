@@ -1,0 +1,23 @@
+ok    caso  1  faixa_dentro_7kg             → 200.00
+ok    caso  2  faixa_limite_70kg            → 161.88
+ok    caso  3  excedente_acima_do_teto      → 231.48
+ok    caso  4  peso_fora_sem_excedente      → PESO_FORA_DAS_FAIXAS
+ok    caso  5  so_frete_peso                → 250.00
+ok    caso  6  minimo_do_frete_pega         → 77.40
+ok    caso  7  minimo_do_frete_nao_pega     → 250.00
+ok    caso  8  gris_percentual              → 270.00
+ok    caso  9  gris_piso                    → 255.00
+ok    caso 10  gris_e_despacho              → 285.00
+ok    caso 11  tarcli_liga                  → 309.36
+ok    caso 12  tarcli_desliga               → 250.00
+ok    caso 13  pallet_informado             → 309.36
+ok    caso 14  pallet_estimado              → 368.72
+ok    caso 15  pedagio_rj                   → 257.00
+ok    caso 16  pedagio_ba                   → 250.00
+ok    caso 17  pedagio_rj_101kg             → 264.00
+ok    caso 18  peso_cubado                  → 250.00
+ok    caso 19  icms_12                      → 336.00
+ok    caso 20  ad_valorem                   → 282.00
+ok    caso 21  reentrega_fora_do_total      → 350.00
+
+21 de 21 passaram · 0 falharam

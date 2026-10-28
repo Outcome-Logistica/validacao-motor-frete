@@ -1,0 +1,22 @@
+[project]
+name = "motor-frete"
+version = "0.1.0"
+description = "Cálculo de frete VN1–VN6 do Outcome — serve a cotação e a auditoria"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi==0.115.6",
+    "uvicorn[standard]==0.34.0",
+    "pydantic==2.10.4",
+    "pydantic-settings==2.7.0",
+    "pymysql==1.1.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==8.3.4",
+    "httpx==0.28.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+testpaths = ["tests"]

@@ -1,0 +1,487 @@
+{
+  "gerado_em": "2026-10-28T00:18:55",
+  "data_referencia": "2026-10-01",
+  "resumo": {
+    "casos": 21,
+    "passaram": 21,
+    "falharam": 0
+  },
+  "mapa": [
+    {
+      "n": 1,
+      "id": "faixa_dentro_7kg",
+      "titulo": "Peso dentro da faixa — banda 0–10 kg",
+      "camada": 1,
+      "bateu": true,
+      "resultado": "200.00"
+    },
+    {
+      "n": 2,
+      "id": "faixa_limite_70kg",
+      "titulo": "Peso no limite da banda — 70 kg",
+      "camada": 1,
+      "bateu": true,
+      "resultado": "161.88"
+    },
+    {
+      "n": 3,
+      "id": "excedente_acima_do_teto",
+      "titulo": "Peso acima do teto, com excedente",
+      "camada": 1,
+      "bateu": true,
+      "resultado": "231.48"
+    },
+    {
+      "n": 4,
+      "id": "peso_fora_sem_excedente",
+      "titulo": "Peso acima do teto, sem excedente",
+      "camada": 1,
+      "bateu": true,
+      "resultado": "PESO_FORA_DAS_FAIXAS"
+    },
+    {
+      "n": 5,
+      "id": "so_frete_peso",
+      "titulo": "Só o frete-peso",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "250.00"
+    },
+    {
+      "n": 6,
+      "id": "minimo_do_frete_pega",
+      "titulo": "O mínimo do frete-peso pega",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "77.40"
+    },
+    {
+      "n": 7,
+      "id": "minimo_do_frete_nao_pega",
+      "titulo": "O mínimo do frete-peso não pega",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "250.00"
+    },
+    {
+      "n": 8,
+      "id": "gris_percentual",
+      "titulo": "GRIS — o percentual ganha do piso",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "270.00"
+    },
+    {
+      "n": 9,
+      "id": "gris_piso",
+      "titulo": "GRIS — o piso ganha do percentual",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "255.00"
+    },
+    {
+      "n": 10,
+      "id": "gris_e_despacho",
+      "titulo": "GRIS e despacho em linhas separadas",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "285.00"
+    },
+    {
+      "n": 11,
+      "id": "tarcli_liga",
+      "titulo": "tarcli liga a cobrança de pallet",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "309.36"
+    },
+    {
+      "n": 12,
+      "id": "tarcli_desliga",
+      "titulo": "tarcli desliga a cobrança de pallet",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "250.00"
+    },
+    {
+      "n": 13,
+      "id": "pallet_informado",
+      "titulo": "Pallet com a quantidade certa",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "309.36"
+    },
+    {
+      "n": 14,
+      "id": "pallet_estimado",
+      "titulo": "Pallet estimado pelos volumes",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "368.72"
+    },
+    {
+      "n": 15,
+      "id": "pedagio_rj",
+      "titulo": "Pedágio no Rio de Janeiro",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "257.00"
+    },
+    {
+      "n": 16,
+      "id": "pedagio_ba",
+      "titulo": "Pedágio fora da lista de estados",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "250.00"
+    },
+    {
+      "n": 17,
+      "id": "pedagio_rj_101kg",
+      "titulo": "Pedágio — fração incompleta arredonda para cima",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "264.00"
+    },
+    {
+      "n": 18,
+      "id": "peso_cubado",
+      "titulo": "Peso cubado no lugar do peso real",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "250.00"
+    },
+    {
+      "n": 19,
+      "id": "icms_12",
+      "titulo": "ICMS de 12% sobre o líquido",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "336.00"
+    },
+    {
+      "n": 20,
+      "id": "ad_valorem",
+      "titulo": "Ad valorem que vem da faixa, não da fórmula",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "282.00"
+    },
+    {
+      "n": 21,
+      "id": "reentrega_fora_do_total",
+      "titulo": "Reentrega calculada e fora do total",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "350.00"
+    }
+  ],
+  "casos": [
+    {
+      "n": 1,
+      "id": "faixa_dentro_7kg",
+      "titulo": "Peso dentro da faixa — banda 0–10 kg",
+      "camada": 1,
+      "bateu": true,
+      "resultado": "200.00",
+      "resposta_do_motor": {
+        "ok": true,
+        "preco": "200.00",
+        "aplicou_excedente": false,
+        "motivo": null
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 2,
+      "id": "faixa_limite_70kg",
+      "titulo": "Peso no limite da banda — 70 kg",
+      "camada": 1,
+      "bateu": true,
+      "resultado": "161.88",
+      "resposta_do_motor": {
+        "ok": true,
+        "preco": "161.88",
+        "aplicou_excedente": false,
+        "motivo": null
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 3,
+      "id": "excedente_acima_do_teto",
+      "titulo": "Peso acima do teto, com excedente",
+      "camada": 1,
+      "bateu": true,
+      "resultado": "231.48",
+      "resposta_do_motor": {
+        "ok": true,
+        "preco": "231.48",
+        "aplicou_excedente": true,
+        "motivo": null
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 4,
+      "id": "peso_fora_sem_excedente",
+      "titulo": "Peso acima do teto, sem excedente",
+      "camada": 1,
+      "bateu": true,
+      "resultado": "PESO_FORA_DAS_FAIXAS",
+      "resposta_do_motor": {
+        "ok": false,
+        "preco": null,
+        "aplicou_excedente": false,
+        "motivo": "PESO_FORA_DAS_FAIXAS"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 5,
+      "id": "so_frete_peso",
+      "titulo": "Só o frete-peso",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "250.00",
+      "resposta_do_motor": {
+        "frete_total": "250.00"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 6,
+      "id": "minimo_do_frete_pega",
+      "titulo": "O mínimo do frete-peso pega",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "77.40",
+      "resposta_do_motor": {
+        "frete_total": "77.40"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 7,
+      "id": "minimo_do_frete_nao_pega",
+      "titulo": "O mínimo do frete-peso não pega",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "250.00",
+      "resposta_do_motor": {
+        "frete_total": "250.00"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 8,
+      "id": "gris_percentual",
+      "titulo": "GRIS — o percentual ganha do piso",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "270.00",
+      "resposta_do_motor": {
+        "frete_total": "270.00"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 9,
+      "id": "gris_piso",
+      "titulo": "GRIS — o piso ganha do percentual",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "255.00",
+      "resposta_do_motor": {
+        "frete_total": "255.00"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 10,
+      "id": "gris_e_despacho",
+      "titulo": "GRIS e despacho em linhas separadas",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "285.00",
+      "resposta_do_motor": {
+        "frete_total": "285.00"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 11,
+      "id": "tarcli_liga",
+      "titulo": "tarcli liga a cobrança de pallet",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "309.36",
+      "resposta_do_motor": {
+        "frete_total": "309.36"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 12,
+      "id": "tarcli_desliga",
+      "titulo": "tarcli desliga a cobrança de pallet",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "250.00",
+      "resposta_do_motor": {
+        "frete_total": "250.00"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 13,
+      "id": "pallet_informado",
+      "titulo": "Pallet com a quantidade certa",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "309.36",
+      "resposta_do_motor": {
+        "frete_total": "309.36"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 14,
+      "id": "pallet_estimado",
+      "titulo": "Pallet estimado pelos volumes",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "368.72",
+      "resposta_do_motor": {
+        "frete_total": "368.72"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 15,
+      "id": "pedagio_rj",
+      "titulo": "Pedágio no Rio de Janeiro",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "257.00",
+      "resposta_do_motor": {
+        "frete_total": "257.00"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 16,
+      "id": "pedagio_ba",
+      "titulo": "Pedágio fora da lista de estados",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "250.00",
+      "resposta_do_motor": {
+        "frete_total": "250.00"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 17,
+      "id": "pedagio_rj_101kg",
+      "titulo": "Pedágio — fração incompleta arredonda para cima",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "264.00",
+      "resposta_do_motor": {
+        "frete_total": "264.00"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 18,
+      "id": "peso_cubado",
+      "titulo": "Peso cubado no lugar do peso real",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "250.00",
+      "resposta_do_motor": {
+        "frete_total": "250.00"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 19,
+      "id": "icms_12",
+      "titulo": "ICMS de 12% sobre o líquido",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "336.00",
+      "resposta_do_motor": {
+        "frete_total": "336.00"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 20,
+      "id": "ad_valorem",
+      "titulo": "Ad valorem que vem da faixa, não da fórmula",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "282.00",
+      "resposta_do_motor": {
+        "frete_total": "282.00"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    },
+    {
+      "n": 21,
+      "id": "reentrega_fora_do_total",
+      "titulo": "Reentrega calculada e fora do total",
+      "camada": 2,
+      "bateu": true,
+      "resultado": "350.00",
+      "resposta_do_motor": {
+        "frete_total": "350.00"
+      },
+      "comparacao": {
+        "bateu": true
+      }
+    }
+  ]
+}

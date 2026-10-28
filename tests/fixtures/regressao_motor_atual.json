@@ -1,0 +1,6730 @@
+{
+  "gerado_em": "2026-09-26T13:44:13",
+  "proposito": "Comportamento do motor_calculo do cotacao_router, congelado antes de as regras sintéticas serem apagadas do banco. O motor novo tem que reproduzir estes números exatamente.",
+  "motor_origem": "importado de routers/cotacao_router.py",
+  "constantes_do_codigo": {
+    "fator_cubagem": 300,
+    "dias_coleta": 1
+  },
+  "observacao": "fator_cubagem e dias_coleta estavam fixos no cotacao_router, não no banco. No modelo novo vêm de modalidades.fator_cubagem e da vigência da rota — por isso o teste passa estes valores explicitamente.",
+  "transportadoras": [
+    {
+      "id": 1,
+      "razao_social": "Expresso Ligeirinho Ltda",
+      "cnpj": "11.111.111/0001-11",
+      "rating": 4.8,
+      "ativo": 1
+    },
+    {
+      "id": 2,
+      "razao_social": "Carga Pesada Logística",
+      "cnpj": "22.222.222/0001-22",
+      "rating": 4.2,
+      "ativo": 1
+    },
+    {
+      "id": 3,
+      "razao_social": "Nacional Transporte Rápido",
+      "cnpj": "33.333.333/0001-33",
+      "rating": 4.5,
+      "ativo": 1
+    },
+    {
+      "id": 4,
+      "razao_social": "AeroFast Express (Aéreo)",
+      "cnpj": "44.444.444/0001-44",
+      "rating": 4.9,
+      "ativo": 1
+    },
+    {
+      "id": 5,
+      "razao_social": "Tartaruga Encomendas Econômicas",
+      "cnpj": "55.555.555/0001-55",
+      "rating": 3.8,
+      "ativo": 1
+    },
+    {
+      "id": 6,
+      "razao_social": "Sul-Sudeste Transportes",
+      "cnpj": "66.666.666/0001-66",
+      "rating": 4.3,
+      "ativo": 1
+    },
+    {
+      "id": 7,
+      "razao_social": "Norte-Nordeste Integração",
+      "cnpj": "77.777.777/0001-77",
+      "rating": 4.1,
+      "ativo": 1
+    },
+    {
+      "id": 8,
+      "razao_social": "Levanta Peso (Cargas Especiais)",
+      "cnpj": "88.888.888/0001-88",
+      "rating": 4.7,
+      "ativo": 1
+    },
+    {
+      "id": 9,
+      "razao_social": "Micro Cargas (E-commerce)",
+      "cnpj": "99.999.999/0001-99",
+      "rating": 4.6,
+      "ativo": 1
+    },
+    {
+      "id": 10,
+      "razao_social": "Rodoviário Padrão Brasil",
+      "cnpj": "10.101.010/0001-10",
+      "rating": 4.0,
+      "ativo": 1
+    },
+    {
+      "id": 11,
+      "razao_social": "SuperNova Entregas",
+      "cnpj": "12.121.212/0001-12",
+      "rating": 4.4,
+      "ativo": 1
+    },
+    {
+      "id": 12,
+      "razao_social": "Flash Delivery Regional",
+      "cnpj": "13.131.313/0001-13",
+      "rating": 4.8,
+      "ativo": 1
+    }
+  ],
+  "tabelas_frete": [
+    {
+      "id": 1,
+      "transportadora_id": 1,
+      "nome_tabela": "Tabela Expressa",
+      "dias_prazo": 3,
+      "regras_calculo": "{\"icms\": 0.18, \"frete_peso\": {\"arred\": 0, \"valor\": 3.0, \"minimo\": 80}, \"sobre_frete\": 0.12, \"minimo_geral\": 160, \"generalidades\": [{\"max\": 250, \"min\": 10, \"base\": \"VNF\", \"arred\": 2, \"valor\": 0.003}, {\"min\": 15, \"base\": \"PPC\", \"arred\": 0, \"valor\": 1.0}]}",
+      "ativo": 1
+    },
+    {
+      "id": 2,
+      "transportadora_id": 2,
+      "nome_tabela": "Tabela Pesada",
+      "dias_prazo": 8,
+      "regras_calculo": "{\"icms\": 0.18, \"frete_peso\": {\"arred\": 0, \"valor\": 1.8, \"minimo\": 60}, \"sobre_frete\": 0.12, \"minimo_geral\": 250, \"generalidades\": [{\"max\": 250, \"min\": 10, \"base\": \"VNF\", \"arred\": 2, \"valor\": 0.005}, {\"min\": 15, \"base\": \"PPC\", \"arred\": 0, \"valor\": 1.5}]}",
+      "ativo": 1
+    },
+    {
+      "id": 3,
+      "transportadora_id": 3,
+      "nome_tabela": "Tabela Padrão BR",
+      "dias_prazo": 5,
+      "regras_calculo": "{\"icms\": 0.18, \"frete_peso\": {\"arred\": 0, \"valor\": 2.5, \"minimo\": 70}, \"sobre_frete\": 0.12, \"minimo_geral\": 150, \"generalidades\": [{\"max\": 250, \"min\": 10, \"base\": \"VNF\", \"arred\": 2, \"valor\": 0.0038}, {\"min\": 15, \"base\": \"PPC\", \"arred\": 0, \"valor\": 1.2}]}",
+      "ativo": 1
+    },
+    {
+      "id": 4,
+      "transportadora_id": 4,
+      "nome_tabela": "Tabela Aérea Urgente",
+      "dias_prazo": 1,
+      "regras_calculo": "{\"icms\": 0.18, \"frete_peso\": {\"arred\": 0, \"valor\": 8.5, \"minimo\": 150}, \"sobre_frete\": 0.12, \"minimo_geral\": 400, \"generalidades\": [{\"max\": 250, \"min\": 10, \"base\": \"VNF\", \"arred\": 2, \"valor\": 0.008}, {\"min\": 15, \"base\": \"PPC\", \"arred\": 0, \"valor\": 2.5}]}",
+      "ativo": 1
+    },
+    {
+      "id": 5,
+      "transportadora_id": 5,
+      "nome_tabela": "Tabela Super Eco",
+      "dias_prazo": 15,
+      "regras_calculo": "{\"icms\": 0.18, \"frete_peso\": {\"arred\": 0, \"valor\": 1.1, \"minimo\": 40}, \"sobre_frete\": 0.12, \"minimo_geral\": 80, \"generalidades\": [{\"max\": 250, \"min\": 10, \"base\": \"VNF\", \"arred\": 2, \"valor\": 0.0015}, {\"min\": 15, \"base\": \"PPC\", \"arred\": 0, \"valor\": 0.5}]}",
+      "ativo": 1
+    },
+    {
+      "id": 6,
+      "transportadora_id": 6,
+      "nome_tabela": "Tabela Sul/Sudeste",
+      "dias_prazo": 4,
+      "regras_calculo": "{\"icms\": 0.18, \"frete_peso\": {\"arred\": 0, \"valor\": 2.2, \"minimo\": 65}, \"sobre_frete\": 0.12, \"minimo_geral\": 140, \"generalidades\": [{\"max\": 250, \"min\": 10, \"base\": \"VNF\", \"arred\": 2, \"valor\": 0.0035}, {\"min\": 15, \"base\": \"PPC\", \"arred\": 0, \"valor\": 1.0}]}",
+      "ativo": 1
+    },
+    {
+      "id": 7,
+      "transportadora_id": 7,
+      "nome_tabela": "Tabela N/NE",
+      "dias_prazo": 6,
+      "regras_calculo": "{\"icms\": 0.18, \"frete_peso\": {\"arred\": 0, \"valor\": 2.8, \"minimo\": 75}, \"sobre_frete\": 0.12, \"minimo_geral\": 170, \"generalidades\": [{\"max\": 250, \"min\": 10, \"base\": \"VNF\", \"arred\": 2, \"valor\": 0.004}, {\"min\": 15, \"base\": \"PPC\", \"arred\": 0, \"valor\": 1.3}]}",
+      "ativo": 1
+    },
+    {
+      "id": 8,
+      "transportadora_id": 8,
+      "nome_tabela": "Tabela Indústria",
+      "dias_prazo": 10,
+      "regras_calculo": "{\"icms\": 0.18, \"frete_peso\": {\"arred\": 0, \"valor\": 0.5, \"minimo\": 300}, \"sobre_frete\": 0.12, \"minimo_geral\": 500, \"generalidades\": [{\"max\": 250, \"min\": 10, \"base\": \"VNF\", \"arred\": 2, \"valor\": 0.002}, {\"min\": 15, \"base\": \"PPC\", \"arred\": 0, \"valor\": 3.0}]}",
+      "ativo": 1
+    },
+    {
+      "id": 9,
+      "transportadora_id": 9,
+      "nome_tabela": "Tabela Fracionada",
+      "dias_prazo": 5,
+      "regras_calculo": "{\"icms\": 0.18, \"frete_peso\": {\"arred\": 0, \"valor\": 4.0, \"minimo\": 30}, \"sobre_frete\": 0.12, \"minimo_geral\": 60, \"generalidades\": [{\"max\": 250, \"min\": 10, \"base\": \"VNF\", \"arred\": 2, \"valor\": 0.005}, {\"min\": 15, \"base\": \"PPC\", \"arred\": 0, \"valor\": 0.8}]}",
+      "ativo": 1
+    },
+    {
+      "id": 10,
+      "transportadora_id": 10,
+      "nome_tabela": "Tabela Convencional",
+      "dias_prazo": 7,
+      "regras_calculo": "{\"icms\": 0.18, \"frete_peso\": {\"arred\": 0, \"valor\": 2.4, \"minimo\": 65}, \"sobre_frete\": 0.12, \"minimo_geral\": 145, \"generalidades\": [{\"max\": 250, \"min\": 10, \"base\": \"VNF\", \"arred\": 2, \"valor\": 0.0035}, {\"min\": 15, \"base\": \"PPC\", \"arred\": 0, \"valor\": 1.1}]}",
+      "ativo": 1
+    },
+    {
+      "id": 11,
+      "transportadora_id": 11,
+      "nome_tabela": "Tabela Promocional",
+      "dias_prazo": 3,
+      "regras_calculo": "{\"icms\": 0.18, \"frete_peso\": {\"arred\": 0, \"valor\": 1.9, \"minimo\": 50}, \"sobre_frete\": 0.12, \"minimo_geral\": 120, \"generalidades\": [{\"max\": 250, \"min\": 10, \"base\": \"VNF\", \"arred\": 2, \"valor\": 0.0025}, {\"min\": 15, \"base\": \"PPC\", \"arred\": 0, \"valor\": 0.9}]}",
+      "ativo": 1
+    },
+    {
+      "id": 12,
+      "transportadora_id": 12,
+      "nome_tabela": "Tabela Flash",
+      "dias_prazo": 2,
+      "regras_calculo": "{\"icms\": 0.18, \"frete_peso\": {\"arred\": 0, \"valor\": 3.5, \"minimo\": 100}, \"sobre_frete\": 0.12, \"minimo_geral\": 200, \"generalidades\": [{\"max\": 250, \"min\": 10, \"base\": \"VNF\", \"arred\": 2, \"valor\": 0.0045}, {\"min\": 15, \"base\": \"PPC\", \"arred\": 0, \"valor\": 1.8}]}",
+      "ativo": 1
+    }
+  ],
+  "fretes_escolhidos": [
+    {
+      "id": 1,
+      "pedido_id": 5,
+      "transportadora_id": 10,
+      "usuario_id": 1,
+      "valor_frete": 348.5,
+      "prazo_dias": 3,
+      "justificativa": "Melhor custo-benefício para prazo exigido pelo cliente."
+    },
+    {
+      "id": 2,
+      "pedido_id": 6,
+      "transportadora_id": 10,
+      "usuario_id": 1,
+      "valor_frete": 512.0,
+      "prazo_dias": 5,
+      "justificativa": null
+    },
+    {
+      "id": 3,
+      "pedido_id": 7,
+      "transportadora_id": 10,
+      "usuario_id": 1,
+      "valor_frete": 189.9,
+      "prazo_dias": 2,
+      "justificativa": null
+    },
+    {
+      "id": 4,
+      "pedido_id": 10,
+      "transportadora_id": 5,
+      "usuario_id": 1,
+      "valor_frete": 235.84,
+      "prazo_dias": 15,
+      "justificativa": ""
+    },
+    {
+      "id": 5,
+      "pedido_id": 1,
+      "transportadora_id": 11,
+      "usuario_id": 1,
+      "valor_frete": 432.83,
+      "prazo_dias": 3,
+      "justificativa": "TESTE"
+    },
+    {
+      "id": 6,
+      "pedido_id": 2,
+      "transportadora_id": 11,
+      "usuario_id": 1,
+      "valor_frete": 690.27,
+      "prazo_dias": 3,
+      "justificativa": "TESTE"
+    },
+    {
+      "id": 7,
+      "pedido_id": 11,
+      "transportadora_id": 11,
+      "usuario_id": 1,
+      "valor_frete": 431.17,
+      "prazo_dias": 3,
+      "justificativa": "TESTE DE CAMPO"
+    }
+  ],
+  "total_casos": 132,
+  "casos": [
+    {
+      "pedido": "EMB-2026-0001",
+      "transportadora_id": 1,
+      "tabela_frete_id": 1,
+      "entrada": {
+        "peso_bruto_kg": 45.9,
+        "volume_m3": 0.36,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.0,
+            "minimo": 80
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 160,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.003
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 108.0,
+        "VN2_frete_peso": 324.0,
+        "VN3_generalidades": 163.5,
+        "VN4_sobre_frete": 58.5,
+        "VN5_icms": 98.28,
+        "frete_liquido": 546.0,
+        "frete_total": 644.28,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0001",
+      "transportadora_id": 2,
+      "tabela_frete_id": 2,
+      "entrada": {
+        "peso_bruto_kg": 45.9,
+        "volume_m3": 0.36,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 8,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.8,
+            "minimo": 60
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 250,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 108.0,
+        "VN2_frete_peso": 194.4,
+        "VN3_generalidades": 254.5,
+        "VN4_sobre_frete": 53.87,
+        "VN5_icms": 90.5,
+        "frete_liquido": 502.77,
+        "frete_total": 593.27,
+        "previsao_entrega": "24/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0001",
+      "transportadora_id": 3,
+      "tabela_frete_id": 3,
+      "entrada": {
+        "peso_bruto_kg": 45.9,
+        "volume_m3": 0.36,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.5,
+            "minimo": 70
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 150,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0038
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.2
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 108.0,
+        "VN2_frete_peso": 270.0,
+        "VN3_generalidades": 199.9,
+        "VN4_sobre_frete": 56.39,
+        "VN5_icms": 94.73,
+        "frete_liquido": 526.29,
+        "frete_total": 621.02,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0001",
+      "transportadora_id": 4,
+      "tabela_frete_id": 4,
+      "entrada": {
+        "peso_bruto_kg": 45.9,
+        "volume_m3": 0.36,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 1,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 8.5,
+            "minimo": 150
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 400,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.008
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 2.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 108.0,
+        "VN2_frete_peso": 918.0,
+        "VN3_generalidades": 418.0,
+        "VN4_sobre_frete": 160.32,
+        "VN5_icms": 269.34,
+        "frete_liquido": 1496.32,
+        "frete_total": 1765.66,
+        "previsao_entrega": "17/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0001",
+      "transportadora_id": 5,
+      "tabela_frete_id": 5,
+      "entrada": {
+        "peso_bruto_kg": 45.9,
+        "volume_m3": 0.36,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 15,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.1,
+            "minimo": 40
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 80,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0015
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 108.0,
+        "VN2_frete_peso": 118.8,
+        "VN3_generalidades": 81.75,
+        "VN4_sobre_frete": 24.07,
+        "VN5_icms": 40.43,
+        "frete_liquido": 224.62,
+        "frete_total": 265.05,
+        "previsao_entrega": "31/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0001",
+      "transportadora_id": 6,
+      "tabela_frete_id": 6,
+      "entrada": {
+        "peso_bruto_kg": 45.9,
+        "volume_m3": 0.36,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 4,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.2,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 140,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 108.0,
+        "VN2_frete_peso": 237.6,
+        "VN3_generalidades": 172.75,
+        "VN4_sobre_frete": 49.24,
+        "VN5_icms": 82.73,
+        "frete_liquido": 459.59,
+        "frete_total": 542.32,
+        "previsao_entrega": "20/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0001",
+      "transportadora_id": 7,
+      "tabela_frete_id": 7,
+      "entrada": {
+        "peso_bruto_kg": 45.9,
+        "volume_m3": 0.36,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 6,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.8,
+            "minimo": 75
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 170,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.004
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.3
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 108.0,
+        "VN2_frete_peso": 302.4,
+        "VN3_generalidades": 214.4,
+        "VN4_sobre_frete": 62.02,
+        "VN5_icms": 104.19,
+        "frete_liquido": 578.82,
+        "frete_total": 683.0,
+        "previsao_entrega": "22/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0001",
+      "transportadora_id": 8,
+      "tabela_frete_id": 8,
+      "entrada": {
+        "peso_bruto_kg": 45.9,
+        "volume_m3": 0.36,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 10,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 0.5,
+            "minimo": 300
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 500,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.002
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 3.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 108.0,
+        "VN2_frete_peso": 300,
+        "VN3_generalidades": 361.0,
+        "VN4_sobre_frete": 79.32,
+        "VN5_icms": 133.26,
+        "frete_liquido": 740.32,
+        "frete_total": 873.58,
+        "previsao_entrega": "26/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0001",
+      "transportadora_id": 9,
+      "tabela_frete_id": 9,
+      "entrada": {
+        "peso_bruto_kg": 45.9,
+        "volume_m3": 0.36,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 4.0,
+            "minimo": 30
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 60,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 108.0,
+        "VN2_frete_peso": 432.0,
+        "VN3_generalidades": 178.9,
+        "VN4_sobre_frete": 73.31,
+        "VN5_icms": 123.16,
+        "frete_liquido": 684.21,
+        "frete_total": 807.37,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0001",
+      "transportadora_id": 10,
+      "tabela_frete_id": 10,
+      "entrada": {
+        "peso_bruto_kg": 45.9,
+        "volume_m3": 0.36,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 7,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.4,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 145,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.1
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 108.0,
+        "VN2_frete_peso": 259.2,
+        "VN3_generalidades": 183.55,
+        "VN4_sobre_frete": 53.13,
+        "VN5_icms": 89.26,
+        "frete_liquido": 495.88,
+        "frete_total": 585.14,
+        "previsao_entrega": "23/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0001",
+      "transportadora_id": 11,
+      "tabela_frete_id": 11,
+      "entrada": {
+        "peso_bruto_kg": 45.9,
+        "volume_m3": 0.36,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.9,
+            "minimo": 50
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 120,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0025
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.9
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 108.0,
+        "VN2_frete_peso": 205.2,
+        "VN3_generalidades": 143.45,
+        "VN4_sobre_frete": 41.84,
+        "VN5_icms": 70.29,
+        "frete_liquido": 390.49,
+        "frete_total": 460.78,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0001",
+      "transportadora_id": 12,
+      "tabela_frete_id": 12,
+      "entrada": {
+        "peso_bruto_kg": 45.9,
+        "volume_m3": 0.36,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 2,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.5,
+            "minimo": 100
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 200,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0045
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 108.0,
+        "VN2_frete_peso": 378.0,
+        "VN3_generalidades": 277.65,
+        "VN4_sobre_frete": 78.68,
+        "VN5_icms": 132.18,
+        "frete_liquido": 734.33,
+        "frete_total": 866.51,
+        "previsao_entrega": "18/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0002",
+      "transportadora_id": 1,
+      "tabela_frete_id": 1,
+      "entrada": {
+        "peso_bruto_kg": 73.2,
+        "volume_m3": 0.56,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.0,
+            "minimo": 80
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 160,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.003
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 168.0,
+        "VN2_frete_peso": 504.0,
+        "VN3_generalidades": 204.9,
+        "VN4_sobre_frete": 85.07,
+        "VN5_icms": 142.91,
+        "frete_liquido": 793.97,
+        "frete_total": 936.88,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0002",
+      "transportadora_id": 2,
+      "tabela_frete_id": 2,
+      "entrada": {
+        "peso_bruto_kg": 73.2,
+        "volume_m3": 0.56,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 8,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.8,
+            "minimo": 60
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 250,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 168.0,
+        "VN2_frete_peso": 302.4,
+        "VN3_generalidades": 313.5,
+        "VN4_sobre_frete": 73.91,
+        "VN5_icms": 124.17,
+        "frete_liquido": 689.81,
+        "frete_total": 813.97,
+        "previsao_entrega": "24/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0002",
+      "transportadora_id": 3,
+      "tabela_frete_id": 3,
+      "entrada": {
+        "peso_bruto_kg": 73.2,
+        "volume_m3": 0.56,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.5,
+            "minimo": 70
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 150,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0038
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.2
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 168.0,
+        "VN2_frete_peso": 420.0,
+        "VN3_generalidades": 248.34,
+        "VN4_sobre_frete": 80.2,
+        "VN5_icms": 134.74,
+        "frete_liquido": 748.54,
+        "frete_total": 883.28,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0002",
+      "transportadora_id": 4,
+      "tabela_frete_id": 4,
+      "entrada": {
+        "peso_bruto_kg": 73.2,
+        "volume_m3": 0.56,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 1,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 8.5,
+            "minimo": 150
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 400,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.008
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 2.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 168.0,
+        "VN2_frete_peso": 1428.0,
+        "VN3_generalidades": 518.4,
+        "VN4_sobre_frete": 233.57,
+        "VN5_icms": 392.39,
+        "frete_liquido": 2179.97,
+        "frete_total": 2572.36,
+        "previsao_entrega": "17/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0002",
+      "transportadora_id": 5,
+      "tabela_frete_id": 5,
+      "entrada": {
+        "peso_bruto_kg": 73.2,
+        "volume_m3": 0.56,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 15,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.1,
+            "minimo": 40
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 80,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0015
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 168.0,
+        "VN2_frete_peso": 184.8,
+        "VN3_generalidades": 102.45,
+        "VN4_sobre_frete": 34.47,
+        "VN5_icms": 57.91,
+        "frete_liquido": 321.72,
+        "frete_total": 379.63,
+        "previsao_entrega": "31/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0002",
+      "transportadora_id": 6,
+      "tabela_frete_id": 6,
+      "entrada": {
+        "peso_bruto_kg": 73.2,
+        "volume_m3": 0.56,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 4,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.2,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 140,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 168.0,
+        "VN2_frete_peso": 369.6,
+        "VN3_generalidades": 211.05,
+        "VN4_sobre_frete": 69.68,
+        "VN5_icms": 117.06,
+        "frete_liquido": 650.33,
+        "frete_total": 767.39,
+        "previsao_entrega": "20/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0002",
+      "transportadora_id": 7,
+      "tabela_frete_id": 7,
+      "entrada": {
+        "peso_bruto_kg": 73.2,
+        "volume_m3": 0.56,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 6,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.8,
+            "minimo": 75
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 170,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.004
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.3
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 168.0,
+        "VN2_frete_peso": 470.4,
+        "VN3_generalidades": 267.6,
+        "VN4_sobre_frete": 88.56,
+        "VN5_icms": 148.78,
+        "frete_liquido": 826.56,
+        "frete_total": 975.34,
+        "previsao_entrega": "22/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0002",
+      "transportadora_id": 8,
+      "tabela_frete_id": 8,
+      "entrada": {
+        "peso_bruto_kg": 73.2,
+        "volume_m3": 0.56,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 10,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 0.5,
+            "minimo": 300
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 500,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.002
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 3.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 168.0,
+        "VN2_frete_peso": 300,
+        "VN3_generalidades": 528.6,
+        "VN4_sobre_frete": 99.43,
+        "VN5_icms": 167.05,
+        "frete_liquido": 928.03,
+        "frete_total": 1095.08,
+        "previsao_entrega": "26/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0002",
+      "transportadora_id": 9,
+      "tabela_frete_id": 9,
+      "entrada": {
+        "peso_bruto_kg": 73.2,
+        "volume_m3": 0.56,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 4.0,
+            "minimo": 30
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 60,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 168.0,
+        "VN2_frete_peso": 672.0,
+        "VN3_generalidades": 195.9,
+        "VN4_sobre_frete": 104.15,
+        "VN5_icms": 174.97,
+        "frete_liquido": 972.05,
+        "frete_total": 1147.02,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0002",
+      "transportadora_id": 10,
+      "tabela_frete_id": 10,
+      "entrada": {
+        "peso_bruto_kg": 73.2,
+        "volume_m3": 0.56,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 7,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.4,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 145,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.1
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 168.0,
+        "VN2_frete_peso": 403.2,
+        "VN3_generalidades": 227.85,
+        "VN4_sobre_frete": 75.73,
+        "VN5_icms": 127.22,
+        "frete_liquido": 706.78,
+        "frete_total": 834.0,
+        "previsao_entrega": "23/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0002",
+      "transportadora_id": 11,
+      "tabela_frete_id": 11,
+      "entrada": {
+        "peso_bruto_kg": 73.2,
+        "volume_m3": 0.56,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.9,
+            "minimo": 50
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 120,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0025
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.9
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 168.0,
+        "VN2_frete_peso": 319.2,
+        "VN3_generalidades": 181.95,
+        "VN4_sobre_frete": 60.14,
+        "VN5_icms": 101.03,
+        "frete_liquido": 561.29,
+        "frete_total": 662.32,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0002",
+      "transportadora_id": 12,
+      "tabela_frete_id": 12,
+      "entrada": {
+        "peso_bruto_kg": 73.2,
+        "volume_m3": 0.56,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 2,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.5,
+            "minimo": 100
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 200,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0045
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 168.0,
+        "VN2_frete_peso": 588.0,
+        "VN3_generalidades": 357.75,
+        "VN4_sobre_frete": 113.49,
+        "VN5_icms": 190.66,
+        "frete_liquido": 1059.24,
+        "frete_total": 1249.9,
+        "previsao_entrega": "18/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0003",
+      "transportadora_id": 1,
+      "tabela_frete_id": 1,
+      "entrada": {
+        "peso_bruto_kg": 58.5,
+        "volume_m3": 0.30625,
+        "valor_nf": 9800.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.0,
+            "minimo": 80
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 160,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.003
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 91.88,
+        "VN2_frete_peso": 276.0,
+        "VN3_generalidades": 121.4,
+        "VN4_sobre_frete": 47.69,
+        "VN5_icms": 80.12,
+        "frete_liquido": 445.09,
+        "frete_total": 525.2,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0003",
+      "transportadora_id": 2,
+      "tabela_frete_id": 2,
+      "entrada": {
+        "peso_bruto_kg": 58.5,
+        "volume_m3": 0.30625,
+        "valor_nf": 9800.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 8,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.8,
+            "minimo": 60
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 250,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 91.88,
+        "VN2_frete_peso": 165.6,
+        "VN3_generalidades": 187.0,
+        "VN4_sobre_frete": 42.31,
+        "VN5_icms": 71.08,
+        "frete_liquido": 394.91,
+        "frete_total": 466.0,
+        "previsao_entrega": "24/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0003",
+      "transportadora_id": 3,
+      "tabela_frete_id": 3,
+      "entrada": {
+        "peso_bruto_kg": 58.5,
+        "volume_m3": 0.30625,
+        "valor_nf": 9800.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.5,
+            "minimo": 70
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 150,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0038
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.2
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 91.88,
+        "VN2_frete_peso": 230.0,
+        "VN3_generalidades": 147.64,
+        "VN4_sobre_frete": 45.32,
+        "VN5_icms": 76.13,
+        "frete_liquido": 422.96,
+        "frete_total": 499.09,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0003",
+      "transportadora_id": 4,
+      "tabela_frete_id": 4,
+      "entrada": {
+        "peso_bruto_kg": 58.5,
+        "volume_m3": 0.30625,
+        "valor_nf": 9800.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 1,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 8.5,
+            "minimo": 150
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 400,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.008
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 2.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 91.88,
+        "VN2_frete_peso": 782.0,
+        "VN3_generalidades": 308.4,
+        "VN4_sobre_frete": 130.85,
+        "VN5_icms": 219.82,
+        "frete_liquido": 1221.25,
+        "frete_total": 1441.07,
+        "previsao_entrega": "17/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0003",
+      "transportadora_id": 5,
+      "tabela_frete_id": 5,
+      "entrada": {
+        "peso_bruto_kg": 58.5,
+        "volume_m3": 0.30625,
+        "valor_nf": 9800.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 15,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.1,
+            "minimo": 40
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 80,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0015
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 91.88,
+        "VN2_frete_peso": 101.2,
+        "VN3_generalidades": 60.7,
+        "VN4_sobre_frete": 19.43,
+        "VN5_icms": 32.64,
+        "frete_liquido": 181.33,
+        "frete_total": 213.97,
+        "previsao_entrega": "31/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0003",
+      "transportadora_id": 6,
+      "tabela_frete_id": 6,
+      "entrada": {
+        "peso_bruto_kg": 58.5,
+        "volume_m3": 0.30625,
+        "valor_nf": 9800.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 4,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.2,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 140,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 91.88,
+        "VN2_frete_peso": 202.4,
+        "VN3_generalidades": 126.3,
+        "VN4_sobre_frete": 39.44,
+        "VN5_icms": 66.27,
+        "frete_liquido": 368.14,
+        "frete_total": 434.41,
+        "previsao_entrega": "20/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0003",
+      "transportadora_id": 7,
+      "tabela_frete_id": 7,
+      "entrada": {
+        "peso_bruto_kg": 58.5,
+        "volume_m3": 0.30625,
+        "valor_nf": 9800.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 6,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.8,
+            "minimo": 75
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 170,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.004
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.3
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 91.88,
+        "VN2_frete_peso": 257.6,
+        "VN3_generalidades": 158.8,
+        "VN4_sobre_frete": 49.97,
+        "VN5_icms": 83.95,
+        "frete_liquido": 466.37,
+        "frete_total": 550.31,
+        "previsao_entrega": "22/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0003",
+      "transportadora_id": 8,
+      "tabela_frete_id": 8,
+      "entrada": {
+        "peso_bruto_kg": 58.5,
+        "volume_m3": 0.30625,
+        "valor_nf": 9800.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 10,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 0.5,
+            "minimo": 300
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 500,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.002
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 3.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 91.88,
+        "VN2_frete_peso": 300,
+        "VN3_generalidades": 295.6,
+        "VN4_sobre_frete": 71.47,
+        "VN5_icms": 120.07,
+        "frete_liquido": 667.07,
+        "frete_total": 787.14,
+        "previsao_entrega": "26/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0003",
+      "transportadora_id": 9,
+      "tabela_frete_id": 9,
+      "entrada": {
+        "peso_bruto_kg": 58.5,
+        "volume_m3": 0.30625,
+        "valor_nf": 9800.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 4.0,
+            "minimo": 30
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 60,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 91.88,
+        "VN2_frete_peso": 368.0,
+        "VN3_generalidades": 122.6,
+        "VN4_sobre_frete": 58.87,
+        "VN5_icms": 98.9,
+        "frete_liquido": 549.47,
+        "frete_total": 648.38,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0003",
+      "transportadora_id": 10,
+      "tabela_frete_id": 10,
+      "entrada": {
+        "peso_bruto_kg": 58.5,
+        "volume_m3": 0.30625,
+        "valor_nf": 9800.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 7,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.4,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 145,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.1
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 91.88,
+        "VN2_frete_peso": 220.8,
+        "VN3_generalidades": 135.5,
+        "VN4_sobre_frete": 42.76,
+        "VN5_icms": 71.83,
+        "frete_liquido": 399.06,
+        "frete_total": 470.89,
+        "previsao_entrega": "23/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0003",
+      "transportadora_id": 11,
+      "tabela_frete_id": 11,
+      "entrada": {
+        "peso_bruto_kg": 58.5,
+        "volume_m3": 0.30625,
+        "valor_nf": 9800.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.9,
+            "minimo": 50
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 120,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0025
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.9
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 91.88,
+        "VN2_frete_peso": 174.8,
+        "VN3_generalidades": 107.3,
+        "VN4_sobre_frete": 33.85,
+        "VN5_icms": 56.87,
+        "frete_liquido": 315.95,
+        "frete_total": 372.82,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0003",
+      "transportadora_id": 12,
+      "tabela_frete_id": 12,
+      "entrada": {
+        "peso_bruto_kg": 58.5,
+        "volume_m3": 0.30625,
+        "valor_nf": 9800.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 2,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.5,
+            "minimo": 100
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 200,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0045
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 91.88,
+        "VN2_frete_peso": 322.0,
+        "VN3_generalidades": 209.7,
+        "VN4_sobre_frete": 63.8,
+        "VN5_icms": 107.19,
+        "frete_liquido": 595.5,
+        "frete_total": 702.69,
+        "previsao_entrega": "18/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0004",
+      "transportadora_id": 1,
+      "tabela_frete_id": 1,
+      "entrada": {
+        "peso_bruto_kg": 12.0,
+        "volume_m3": 0.04375,
+        "valor_nf": 5500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.0,
+            "minimo": 80
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 160,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.003
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 13.12,
+        "VN2_frete_peso": 80,
+        "VN3_generalidades": 31.5,
+        "VN4_sobre_frete": 13.38,
+        "VN5_icms": 22.48,
+        "frete_liquido": 124.88,
+        "frete_total": 160,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0004",
+      "transportadora_id": 2,
+      "tabela_frete_id": 2,
+      "entrada": {
+        "peso_bruto_kg": 12.0,
+        "volume_m3": 0.04375,
+        "valor_nf": 5500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 8,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.8,
+            "minimo": 60
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 250,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 13.12,
+        "VN2_frete_peso": 60,
+        "VN3_generalidades": 47.0,
+        "VN4_sobre_frete": 12.84,
+        "VN5_icms": 21.57,
+        "frete_liquido": 119.84,
+        "frete_total": 250,
+        "previsao_entrega": "24/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0004",
+      "transportadora_id": 3,
+      "tabela_frete_id": 3,
+      "entrada": {
+        "peso_bruto_kg": 12.0,
+        "volume_m3": 0.04375,
+        "valor_nf": 5500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.5,
+            "minimo": 70
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 150,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0038
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.2
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 13.12,
+        "VN2_frete_peso": 70,
+        "VN3_generalidades": 36.5,
+        "VN4_sobre_frete": 12.78,
+        "VN5_icms": 21.47,
+        "frete_liquido": 119.28,
+        "frete_total": 150,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0004",
+      "transportadora_id": 4,
+      "tabela_frete_id": 4,
+      "entrada": {
+        "peso_bruto_kg": 12.0,
+        "volume_m3": 0.04375,
+        "valor_nf": 5500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 1,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 8.5,
+            "minimo": 150
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 400,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.008
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 2.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 13.12,
+        "VN2_frete_peso": 150,
+        "VN3_generalidades": 76.5,
+        "VN4_sobre_frete": 27.18,
+        "VN5_icms": 45.66,
+        "frete_liquido": 253.68,
+        "frete_total": 400,
+        "previsao_entrega": "17/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0004",
+      "transportadora_id": 5,
+      "tabela_frete_id": 5,
+      "entrada": {
+        "peso_bruto_kg": 12.0,
+        "volume_m3": 0.04375,
+        "valor_nf": 5500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 15,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.1,
+            "minimo": 40
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 80,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0015
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 13.12,
+        "VN2_frete_peso": 40,
+        "VN3_generalidades": 25,
+        "VN4_sobre_frete": 7.8,
+        "VN5_icms": 13.1,
+        "frete_liquido": 72.8,
+        "frete_total": 85.9,
+        "previsao_entrega": "31/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0004",
+      "transportadora_id": 6,
+      "tabela_frete_id": 6,
+      "entrada": {
+        "peso_bruto_kg": 12.0,
+        "volume_m3": 0.04375,
+        "valor_nf": 5500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 4,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.2,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 140,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 13.12,
+        "VN2_frete_peso": 65,
+        "VN3_generalidades": 34.25,
+        "VN4_sobre_frete": 11.91,
+        "VN5_icms": 20.01,
+        "frete_liquido": 111.16,
+        "frete_total": 140,
+        "previsao_entrega": "20/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0004",
+      "transportadora_id": 7,
+      "tabela_frete_id": 7,
+      "entrada": {
+        "peso_bruto_kg": 12.0,
+        "volume_m3": 0.04375,
+        "valor_nf": 5500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 6,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.8,
+            "minimo": 75
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 170,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.004
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.3
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 13.12,
+        "VN2_frete_peso": 75,
+        "VN3_generalidades": 38.9,
+        "VN4_sobre_frete": 13.67,
+        "VN5_icms": 22.96,
+        "frete_liquido": 127.57,
+        "frete_total": 170,
+        "previsao_entrega": "22/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0004",
+      "transportadora_id": 8,
+      "tabela_frete_id": 8,
+      "entrada": {
+        "peso_bruto_kg": 12.0,
+        "volume_m3": 0.04375,
+        "valor_nf": 5500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 10,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 0.5,
+            "minimo": 300
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 500,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.002
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 3.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 13.12,
+        "VN2_frete_peso": 300,
+        "VN3_generalidades": 50.0,
+        "VN4_sobre_frete": 42.0,
+        "VN5_icms": 70.56,
+        "frete_liquido": 392.0,
+        "frete_total": 500,
+        "previsao_entrega": "26/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0004",
+      "transportadora_id": 9,
+      "tabela_frete_id": 9,
+      "entrada": {
+        "peso_bruto_kg": 12.0,
+        "volume_m3": 0.04375,
+        "valor_nf": 5500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 4.0,
+            "minimo": 30
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 60,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 13.12,
+        "VN2_frete_peso": 52.0,
+        "VN3_generalidades": 42.5,
+        "VN4_sobre_frete": 11.34,
+        "VN5_icms": 19.05,
+        "frete_liquido": 105.84,
+        "frete_total": 124.89,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0004",
+      "transportadora_id": 10,
+      "tabela_frete_id": 10,
+      "entrada": {
+        "peso_bruto_kg": 12.0,
+        "volume_m3": 0.04375,
+        "valor_nf": 5500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 7,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.4,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 145,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.1
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 13.12,
+        "VN2_frete_peso": 65,
+        "VN3_generalidades": 34.25,
+        "VN4_sobre_frete": 11.91,
+        "VN5_icms": 20.01,
+        "frete_liquido": 111.16,
+        "frete_total": 145,
+        "previsao_entrega": "23/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0004",
+      "transportadora_id": 11,
+      "tabela_frete_id": 11,
+      "entrada": {
+        "peso_bruto_kg": 12.0,
+        "volume_m3": 0.04375,
+        "valor_nf": 5500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.9,
+            "minimo": 50
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 120,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0025
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.9
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 13.12,
+        "VN2_frete_peso": 50,
+        "VN3_generalidades": 28.75,
+        "VN4_sobre_frete": 9.45,
+        "VN5_icms": 15.88,
+        "frete_liquido": 88.2,
+        "frete_total": 120,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0004",
+      "transportadora_id": 12,
+      "tabela_frete_id": 12,
+      "entrada": {
+        "peso_bruto_kg": 12.0,
+        "volume_m3": 0.04375,
+        "valor_nf": 5500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 2,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.5,
+            "minimo": 100
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 200,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0045
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 13.12,
+        "VN2_frete_peso": 100,
+        "VN3_generalidades": 48.15,
+        "VN4_sobre_frete": 17.78,
+        "VN5_icms": 29.87,
+        "frete_liquido": 165.93,
+        "frete_total": 200,
+        "previsao_entrega": "18/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0005",
+      "transportadora_id": 1,
+      "tabela_frete_id": 1,
+      "entrada": {
+        "peso_bruto_kg": 67.5,
+        "volume_m3": 0.72,
+        "valor_nf": 22000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.0,
+            "minimo": 80
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 160,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.003
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 216.0,
+        "VN2_frete_peso": 648.0,
+        "VN3_generalidades": 282.0,
+        "VN4_sobre_frete": 111.6,
+        "VN5_icms": 187.49,
+        "frete_liquido": 1041.6,
+        "frete_total": 1229.09,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0005",
+      "transportadora_id": 2,
+      "tabela_frete_id": 2,
+      "entrada": {
+        "peso_bruto_kg": 67.5,
+        "volume_m3": 0.72,
+        "valor_nf": 22000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 8,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.8,
+            "minimo": 60
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 250,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 216.0,
+        "VN2_frete_peso": 388.8,
+        "VN3_generalidades": 434.0,
+        "VN4_sobre_frete": 98.74,
+        "VN5_icms": 165.88,
+        "frete_liquido": 921.54,
+        "frete_total": 1087.41,
+        "previsao_entrega": "24/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0005",
+      "transportadora_id": 3,
+      "tabela_frete_id": 3,
+      "entrada": {
+        "peso_bruto_kg": 67.5,
+        "volume_m3": 0.72,
+        "valor_nf": 22000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.5,
+            "minimo": 70
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 150,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0038
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.2
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 216.0,
+        "VN2_frete_peso": 540.0,
+        "VN3_generalidades": 342.8,
+        "VN4_sobre_frete": 105.94,
+        "VN5_icms": 177.97,
+        "frete_liquido": 988.74,
+        "frete_total": 1166.71,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0005",
+      "transportadora_id": 4,
+      "tabela_frete_id": 4,
+      "entrada": {
+        "peso_bruto_kg": 67.5,
+        "volume_m3": 0.72,
+        "valor_nf": 22000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 1,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 8.5,
+            "minimo": 150
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 400,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.008
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 2.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 216.0,
+        "VN2_frete_peso": 1836.0,
+        "VN3_generalidades": 716.0,
+        "VN4_sobre_frete": 306.24,
+        "VN5_icms": 514.48,
+        "frete_liquido": 2858.24,
+        "frete_total": 3372.72,
+        "previsao_entrega": "17/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0005",
+      "transportadora_id": 5,
+      "tabela_frete_id": 5,
+      "entrada": {
+        "peso_bruto_kg": 67.5,
+        "volume_m3": 0.72,
+        "valor_nf": 22000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 15,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.1,
+            "minimo": 40
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 80,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0015
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 216.0,
+        "VN2_frete_peso": 237.6,
+        "VN3_generalidades": 141.0,
+        "VN4_sobre_frete": 45.43,
+        "VN5_icms": 76.33,
+        "frete_liquido": 424.03,
+        "frete_total": 500.36,
+        "previsao_entrega": "31/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0005",
+      "transportadora_id": 6,
+      "tabela_frete_id": 6,
+      "entrada": {
+        "peso_bruto_kg": 67.5,
+        "volume_m3": 0.72,
+        "valor_nf": 22000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 4,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.2,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 140,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 216.0,
+        "VN2_frete_peso": 475.2,
+        "VN3_generalidades": 293.0,
+        "VN4_sobre_frete": 92.18,
+        "VN5_icms": 154.87,
+        "frete_liquido": 860.38,
+        "frete_total": 1015.25,
+        "previsao_entrega": "20/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0005",
+      "transportadora_id": 7,
+      "tabela_frete_id": 7,
+      "entrada": {
+        "peso_bruto_kg": 67.5,
+        "volume_m3": 0.72,
+        "valor_nf": 22000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 6,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.8,
+            "minimo": 75
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 170,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.004
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.3
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 216.0,
+        "VN2_frete_peso": 604.8,
+        "VN3_generalidades": 368.8,
+        "VN4_sobre_frete": 116.83,
+        "VN5_icms": 196.28,
+        "frete_liquido": 1090.43,
+        "frete_total": 1286.71,
+        "previsao_entrega": "22/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0005",
+      "transportadora_id": 8,
+      "tabela_frete_id": 8,
+      "entrada": {
+        "peso_bruto_kg": 67.5,
+        "volume_m3": 0.72,
+        "valor_nf": 22000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 10,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 0.5,
+            "minimo": 300
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 500,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.002
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 3.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 216.0,
+        "VN2_frete_peso": 300,
+        "VN3_generalidades": 692.0,
+        "VN4_sobre_frete": 119.04,
+        "VN5_icms": 199.99,
+        "frete_liquido": 1111.04,
+        "frete_total": 1311.03,
+        "previsao_entrega": "26/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0005",
+      "transportadora_id": 9,
+      "tabela_frete_id": 9,
+      "entrada": {
+        "peso_bruto_kg": 67.5,
+        "volume_m3": 0.72,
+        "valor_nf": 22000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 4.0,
+            "minimo": 30
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 60,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 216.0,
+        "VN2_frete_peso": 864.0,
+        "VN3_generalidades": 282.8,
+        "VN4_sobre_frete": 137.62,
+        "VN5_icms": 231.19,
+        "frete_liquido": 1284.42,
+        "frete_total": 1515.61,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0005",
+      "transportadora_id": 10,
+      "tabela_frete_id": 10,
+      "entrada": {
+        "peso_bruto_kg": 67.5,
+        "volume_m3": 0.72,
+        "valor_nf": 22000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 7,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.4,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 145,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.1
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 216.0,
+        "VN2_frete_peso": 518.4,
+        "VN3_generalidades": 314.6,
+        "VN4_sobre_frete": 99.96,
+        "VN5_icms": 167.93,
+        "frete_liquido": 932.96,
+        "frete_total": 1100.89,
+        "previsao_entrega": "23/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0005",
+      "transportadora_id": 11,
+      "tabela_frete_id": 11,
+      "entrada": {
+        "peso_bruto_kg": 67.5,
+        "volume_m3": 0.72,
+        "valor_nf": 22000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.9,
+            "minimo": 50
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 120,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0025
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.9
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 216.0,
+        "VN2_frete_peso": 410.4,
+        "VN3_generalidades": 249.4,
+        "VN4_sobre_frete": 79.18,
+        "VN5_icms": 133.02,
+        "frete_liquido": 738.98,
+        "frete_total": 871.99,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0005",
+      "transportadora_id": 12,
+      "tabela_frete_id": 12,
+      "entrada": {
+        "peso_bruto_kg": 67.5,
+        "volume_m3": 0.72,
+        "valor_nf": 22000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 2,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.5,
+            "minimo": 100
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 200,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0045
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 216.0,
+        "VN2_frete_peso": 756.0,
+        "VN3_generalidades": 487.8,
+        "VN4_sobre_frete": 149.26,
+        "VN5_icms": 250.75,
+        "frete_liquido": 1393.06,
+        "frete_total": 1643.81,
+        "previsao_entrega": "18/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0006",
+      "transportadora_id": 1,
+      "tabela_frete_id": 1,
+      "entrada": {
+        "peso_bruto_kg": 130.0,
+        "volume_m3": 0.5915,
+        "valor_nf": 31500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.0,
+            "minimo": 80
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 160,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.003
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 177.45,
+        "VN2_frete_peso": 531.0,
+        "VN3_generalidades": 271.5,
+        "VN4_sobre_frete": 96.3,
+        "VN5_icms": 161.78,
+        "frete_liquido": 898.8,
+        "frete_total": 1060.58,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0006",
+      "transportadora_id": 2,
+      "tabela_frete_id": 2,
+      "entrada": {
+        "peso_bruto_kg": 130.0,
+        "volume_m3": 0.5915,
+        "valor_nf": 31500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 8,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.8,
+            "minimo": 60
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 250,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 177.45,
+        "VN2_frete_peso": 318.6,
+        "VN3_generalidades": 423.0,
+        "VN4_sobre_frete": 88.99,
+        "VN5_icms": 149.51,
+        "frete_liquido": 830.59,
+        "frete_total": 980.1,
+        "previsao_entrega": "24/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0006",
+      "transportadora_id": 3,
+      "tabela_frete_id": 3,
+      "entrada": {
+        "peso_bruto_kg": 130.0,
+        "volume_m3": 0.5915,
+        "valor_nf": 31500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.5,
+            "minimo": 70
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 150,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0038
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.2
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 177.45,
+        "VN2_frete_peso": 442.5,
+        "VN3_generalidades": 332.1,
+        "VN4_sobre_frete": 92.95,
+        "VN5_icms": 156.16,
+        "frete_liquido": 867.55,
+        "frete_total": 1023.71,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0006",
+      "transportadora_id": 4,
+      "tabela_frete_id": 4,
+      "entrada": {
+        "peso_bruto_kg": 130.0,
+        "volume_m3": 0.5915,
+        "valor_nf": 31500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 1,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 8.5,
+            "minimo": 150
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 400,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.008
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 2.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 177.45,
+        "VN2_frete_peso": 1504.5,
+        "VN3_generalidades": 692.5,
+        "VN4_sobre_frete": 263.64,
+        "VN5_icms": 442.92,
+        "frete_liquido": 2460.64,
+        "frete_total": 2903.56,
+        "previsao_entrega": "17/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0006",
+      "transportadora_id": 5,
+      "tabela_frete_id": 5,
+      "entrada": {
+        "peso_bruto_kg": 130.0,
+        "volume_m3": 0.5915,
+        "valor_nf": 31500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 15,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.1,
+            "minimo": 40
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 80,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0015
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 177.45,
+        "VN2_frete_peso": 194.7,
+        "VN3_generalidades": 135.75,
+        "VN4_sobre_frete": 39.65,
+        "VN5_icms": 66.62,
+        "frete_liquido": 370.1,
+        "frete_total": 436.72,
+        "previsao_entrega": "31/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0006",
+      "transportadora_id": 6,
+      "tabela_frete_id": 6,
+      "entrada": {
+        "peso_bruto_kg": 130.0,
+        "volume_m3": 0.5915,
+        "valor_nf": 31500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 4,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.2,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 140,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 177.45,
+        "VN2_frete_peso": 389.4,
+        "VN3_generalidades": 287.25,
+        "VN4_sobre_frete": 81.2,
+        "VN5_icms": 136.41,
+        "frete_liquido": 757.85,
+        "frete_total": 894.26,
+        "previsao_entrega": "20/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0006",
+      "transportadora_id": 7,
+      "tabela_frete_id": 7,
+      "entrada": {
+        "peso_bruto_kg": 130.0,
+        "volume_m3": 0.5915,
+        "valor_nf": 31500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 6,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.8,
+            "minimo": 75
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 170,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.004
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.3
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 177.45,
+        "VN2_frete_peso": 495.6,
+        "VN3_generalidades": 356.1,
+        "VN4_sobre_frete": 102.2,
+        "VN5_icms": 171.7,
+        "frete_liquido": 953.9,
+        "frete_total": 1125.61,
+        "previsao_entrega": "22/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0006",
+      "transportadora_id": 8,
+      "tabela_frete_id": 8,
+      "entrada": {
+        "peso_bruto_kg": 130.0,
+        "volume_m3": 0.5915,
+        "valor_nf": 31500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 10,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 0.5,
+            "minimo": 300
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 500,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.002
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 3.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 177.45,
+        "VN2_frete_peso": 300,
+        "VN3_generalidades": 594.0,
+        "VN4_sobre_frete": 107.28,
+        "VN5_icms": 180.23,
+        "frete_liquido": 1001.28,
+        "frete_total": 1181.51,
+        "previsao_entrega": "26/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0006",
+      "transportadora_id": 9,
+      "tabela_frete_id": 9,
+      "entrada": {
+        "peso_bruto_kg": 130.0,
+        "volume_m3": 0.5915,
+        "valor_nf": 31500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 4.0,
+            "minimo": 30
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 60,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 177.45,
+        "VN2_frete_peso": 708.0,
+        "VN3_generalidades": 299.1,
+        "VN4_sobre_frete": 120.85,
+        "VN5_icms": 203.03,
+        "frete_liquido": 1127.95,
+        "frete_total": 1330.98,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0006",
+      "transportadora_id": 10,
+      "tabela_frete_id": 10,
+      "entrada": {
+        "peso_bruto_kg": 130.0,
+        "volume_m3": 0.5915,
+        "valor_nf": 31500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 7,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.4,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 145,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.1
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 177.45,
+        "VN2_frete_peso": 424.8,
+        "VN3_generalidades": 304.95,
+        "VN4_sobre_frete": 87.57,
+        "VN5_icms": 147.12,
+        "frete_liquido": 817.32,
+        "frete_total": 964.44,
+        "previsao_entrega": "23/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0006",
+      "transportadora_id": 11,
+      "tabela_frete_id": 11,
+      "entrada": {
+        "peso_bruto_kg": 130.0,
+        "volume_m3": 0.5915,
+        "valor_nf": 31500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.9,
+            "minimo": 50
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 120,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0025
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.9
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 177.45,
+        "VN2_frete_peso": 336.3,
+        "VN3_generalidades": 238.05,
+        "VN4_sobre_frete": 68.92,
+        "VN5_icms": 115.79,
+        "frete_liquido": 643.27,
+        "frete_total": 759.06,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0006",
+      "transportadora_id": 12,
+      "tabela_frete_id": 12,
+      "entrada": {
+        "peso_bruto_kg": 130.0,
+        "volume_m3": 0.5915,
+        "valor_nf": 31500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 2,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.5,
+            "minimo": 100
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 200,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0045
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 177.45,
+        "VN2_frete_peso": 619.5,
+        "VN3_generalidades": 460.35,
+        "VN4_sobre_frete": 129.58,
+        "VN5_icms": 217.7,
+        "frete_liquido": 1209.43,
+        "frete_total": 1427.13,
+        "previsao_entrega": "18/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0007",
+      "transportadora_id": 1,
+      "tabela_frete_id": 1,
+      "entrada": {
+        "peso_bruto_kg": 12.4,
+        "volume_m3": 0.06,
+        "valor_nf": 14200.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.0,
+            "minimo": 80
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 160,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.003
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 18.0,
+        "VN2_frete_peso": 80,
+        "VN3_generalidades": 60.6,
+        "VN4_sobre_frete": 16.87,
+        "VN5_icms": 28.34,
+        "frete_liquido": 157.47,
+        "frete_total": 185.82,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0007",
+      "transportadora_id": 2,
+      "tabela_frete_id": 2,
+      "entrada": {
+        "peso_bruto_kg": 12.4,
+        "volume_m3": 0.06,
+        "valor_nf": 14200.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 8,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.8,
+            "minimo": 60
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 250,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 18.0,
+        "VN2_frete_peso": 60,
+        "VN3_generalidades": 98.0,
+        "VN4_sobre_frete": 18.96,
+        "VN5_icms": 31.85,
+        "frete_liquido": 176.96,
+        "frete_total": 250,
+        "previsao_entrega": "24/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0007",
+      "transportadora_id": 3,
+      "tabela_frete_id": 3,
+      "entrada": {
+        "peso_bruto_kg": 12.4,
+        "volume_m3": 0.06,
+        "valor_nf": 14200.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.5,
+            "minimo": 70
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 150,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0038
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.2
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 18.0,
+        "VN2_frete_peso": 70,
+        "VN3_generalidades": 75.56,
+        "VN4_sobre_frete": 17.47,
+        "VN5_icms": 29.34,
+        "frete_liquido": 163.03,
+        "frete_total": 192.37,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0007",
+      "transportadora_id": 4,
+      "tabela_frete_id": 4,
+      "entrada": {
+        "peso_bruto_kg": 12.4,
+        "volume_m3": 0.06,
+        "valor_nf": 14200.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 1,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 8.5,
+            "minimo": 150
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 400,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.008
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 2.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 18.0,
+        "VN2_frete_peso": 153.0,
+        "VN3_generalidades": 158.6,
+        "VN4_sobre_frete": 37.39,
+        "VN5_icms": 62.82,
+        "frete_liquido": 348.99,
+        "frete_total": 411.81,
+        "previsao_entrega": "17/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0007",
+      "transportadora_id": 5,
+      "tabela_frete_id": 5,
+      "entrada": {
+        "peso_bruto_kg": 12.4,
+        "volume_m3": 0.06,
+        "valor_nf": 14200.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 15,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.1,
+            "minimo": 40
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 80,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0015
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 18.0,
+        "VN2_frete_peso": 40,
+        "VN3_generalidades": 36.3,
+        "VN4_sobre_frete": 9.16,
+        "VN5_icms": 15.38,
+        "frete_liquido": 85.46,
+        "frete_total": 100.84,
+        "previsao_entrega": "31/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0007",
+      "transportadora_id": 6,
+      "tabela_frete_id": 6,
+      "entrada": {
+        "peso_bruto_kg": 12.4,
+        "volume_m3": 0.06,
+        "valor_nf": 14200.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 4,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.2,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 140,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 18.0,
+        "VN2_frete_peso": 65,
+        "VN3_generalidades": 67.7,
+        "VN4_sobre_frete": 15.92,
+        "VN5_icms": 26.75,
+        "frete_liquido": 148.62,
+        "frete_total": 175.38,
+        "previsao_entrega": "20/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0007",
+      "transportadora_id": 7,
+      "tabela_frete_id": 7,
+      "entrada": {
+        "peso_bruto_kg": 12.4,
+        "volume_m3": 0.06,
+        "valor_nf": 14200.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 6,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.8,
+            "minimo": 75
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 170,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.004
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.3
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 18.0,
+        "VN2_frete_peso": 75,
+        "VN3_generalidades": 80.2,
+        "VN4_sobre_frete": 18.62,
+        "VN5_icms": 31.29,
+        "frete_liquido": 173.82,
+        "frete_total": 205.11,
+        "previsao_entrega": "22/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0007",
+      "transportadora_id": 8,
+      "tabela_frete_id": 8,
+      "entrada": {
+        "peso_bruto_kg": 12.4,
+        "volume_m3": 0.06,
+        "valor_nf": 14200.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 10,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 0.5,
+            "minimo": 300
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 500,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.002
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 3.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 18.0,
+        "VN2_frete_peso": 300,
+        "VN3_generalidades": 82.4,
+        "VN4_sobre_frete": 45.89,
+        "VN5_icms": 77.09,
+        "frete_liquido": 428.29,
+        "frete_total": 505.38,
+        "previsao_entrega": "26/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0007",
+      "transportadora_id": 9,
+      "tabela_frete_id": 9,
+      "entrada": {
+        "peso_bruto_kg": 12.4,
+        "volume_m3": 0.06,
+        "valor_nf": 14200.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 4.0,
+            "minimo": 30
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 60,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 18.0,
+        "VN2_frete_peso": 72.0,
+        "VN3_generalidades": 86.0,
+        "VN4_sobre_frete": 18.96,
+        "VN5_icms": 31.85,
+        "frete_liquido": 176.96,
+        "frete_total": 208.81,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0007",
+      "transportadora_id": 10,
+      "tabela_frete_id": 10,
+      "entrada": {
+        "peso_bruto_kg": 12.4,
+        "volume_m3": 0.06,
+        "valor_nf": 14200.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 7,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.4,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 145,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.1
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 18.0,
+        "VN2_frete_peso": 65,
+        "VN3_generalidades": 69.5,
+        "VN4_sobre_frete": 16.14,
+        "VN5_icms": 27.12,
+        "frete_liquido": 150.64,
+        "frete_total": 177.76,
+        "previsao_entrega": "23/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0007",
+      "transportadora_id": 11,
+      "tabela_frete_id": 11,
+      "entrada": {
+        "peso_bruto_kg": 12.4,
+        "volume_m3": 0.06,
+        "valor_nf": 14200.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.9,
+            "minimo": 50
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 120,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0025
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.9
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 18.0,
+        "VN2_frete_peso": 50,
+        "VN3_generalidades": 51.7,
+        "VN4_sobre_frete": 12.2,
+        "VN5_icms": 20.5,
+        "frete_liquido": 113.9,
+        "frete_total": 134.41,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0007",
+      "transportadora_id": 12,
+      "tabela_frete_id": 12,
+      "entrada": {
+        "peso_bruto_kg": 12.4,
+        "volume_m3": 0.06,
+        "valor_nf": 14200.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 2,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.5,
+            "minimo": 100
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 200,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0045
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 18.0,
+        "VN2_frete_peso": 100,
+        "VN3_generalidades": 96.3,
+        "VN4_sobre_frete": 23.56,
+        "VN5_icms": 39.57,
+        "frete_liquido": 219.86,
+        "frete_total": 259.43,
+        "previsao_entrega": "18/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0001",
+      "transportadora_id": 1,
+      "tabela_frete_id": 1,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 9000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.0,
+            "minimo": 80
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 160,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.003
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 138.0,
+        "VN3_generalidades": 73.0,
+        "VN4_sobre_frete": 25.32,
+        "VN5_icms": 42.54,
+        "frete_liquido": 236.32,
+        "frete_total": 278.86,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0001",
+      "transportadora_id": 2,
+      "tabela_frete_id": 2,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 9000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 8,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.8,
+            "minimo": 60
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 250,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 82.8,
+        "VN3_generalidades": 114.0,
+        "VN4_sobre_frete": 23.62,
+        "VN5_icms": 39.67,
+        "frete_liquido": 220.42,
+        "frete_total": 260.09,
+        "previsao_entrega": "24/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0001",
+      "transportadora_id": 3,
+      "tabela_frete_id": 3,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 9000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.5,
+            "minimo": 70
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 150,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0038
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.2
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 115.0,
+        "VN3_generalidades": 89.4,
+        "VN4_sobre_frete": 24.53,
+        "VN5_icms": 41.21,
+        "frete_liquido": 228.93,
+        "frete_total": 270.14,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0001",
+      "transportadora_id": 4,
+      "tabela_frete_id": 4,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 9000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 1,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 8.5,
+            "minimo": 150
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 400,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.008
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 2.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 391.0,
+        "VN3_generalidades": 187.0,
+        "VN4_sobre_frete": 69.36,
+        "VN5_icms": 116.52,
+        "frete_liquido": 647.36,
+        "frete_total": 763.88,
+        "previsao_entrega": "17/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0001",
+      "transportadora_id": 5,
+      "tabela_frete_id": 5,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 9000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 15,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.1,
+            "minimo": 40
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 80,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0015
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 50.6,
+        "VN3_generalidades": 36.5,
+        "VN4_sobre_frete": 10.45,
+        "VN5_icms": 17.56,
+        "frete_liquido": 97.55,
+        "frete_total": 115.11,
+        "previsao_entrega": "31/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0001",
+      "transportadora_id": 6,
+      "tabela_frete_id": 6,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 9000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 4,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.2,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 140,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 101.2,
+        "VN3_generalidades": 77.5,
+        "VN4_sobre_frete": 21.44,
+        "VN5_icms": 36.03,
+        "frete_liquido": 200.14,
+        "frete_total": 236.17,
+        "previsao_entrega": "20/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0001",
+      "transportadora_id": 7,
+      "tabela_frete_id": 7,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 9000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 6,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.8,
+            "minimo": 75
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 170,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.004
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.3
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 128.8,
+        "VN3_generalidades": 95.8,
+        "VN4_sobre_frete": 26.95,
+        "VN5_icms": 45.28,
+        "frete_liquido": 251.55,
+        "frete_total": 296.83,
+        "previsao_entrega": "22/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0001",
+      "transportadora_id": 8,
+      "tabela_frete_id": 8,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 9000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 10,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 0.5,
+            "minimo": 300
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 500,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.002
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 3.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 300,
+        "VN3_generalidades": 156.0,
+        "VN4_sobre_frete": 54.72,
+        "VN5_icms": 91.93,
+        "frete_liquido": 510.72,
+        "frete_total": 602.65,
+        "previsao_entrega": "26/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0001",
+      "transportadora_id": 9,
+      "tabela_frete_id": 9,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 9000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 4.0,
+            "minimo": 30
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 60,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 184.0,
+        "VN3_generalidades": 81.8,
+        "VN4_sobre_frete": 31.9,
+        "VN5_icms": 53.59,
+        "frete_liquido": 297.7,
+        "frete_total": 351.28,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0001",
+      "transportadora_id": 10,
+      "tabela_frete_id": 10,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 9000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 7,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.4,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 145,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.1
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 110.4,
+        "VN3_generalidades": 82.1,
+        "VN4_sobre_frete": 23.1,
+        "VN5_icms": 38.81,
+        "frete_liquido": 215.6,
+        "frete_total": 254.41,
+        "previsao_entrega": "23/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0001",
+      "transportadora_id": 11,
+      "tabela_frete_id": 11,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 9000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.9,
+            "minimo": 50
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 120,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0025
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.9
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 87.4,
+        "VN3_generalidades": 63.9,
+        "VN4_sobre_frete": 18.16,
+        "VN5_icms": 30.5,
+        "frete_liquido": 169.46,
+        "frete_total": 199.96,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0001",
+      "transportadora_id": 12,
+      "tabela_frete_id": 12,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 9000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 2,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.5,
+            "minimo": 100
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 200,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0045
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 161.0,
+        "VN3_generalidades": 123.3,
+        "VN4_sobre_frete": 34.12,
+        "VN5_icms": 57.31,
+        "frete_liquido": 318.42,
+        "frete_total": 375.73,
+        "previsao_entrega": "18/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0002",
+      "transportadora_id": 1,
+      "tabela_frete_id": 1,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 14000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.0,
+            "minimo": 80
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 160,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.003
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 138.0,
+        "VN3_generalidades": 88.0,
+        "VN4_sobre_frete": 27.12,
+        "VN5_icms": 45.56,
+        "frete_liquido": 253.12,
+        "frete_total": 298.68,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0002",
+      "transportadora_id": 2,
+      "tabela_frete_id": 2,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 14000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 8,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.8,
+            "minimo": 60
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 250,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 82.8,
+        "VN3_generalidades": 139.0,
+        "VN4_sobre_frete": 26.62,
+        "VN5_icms": 44.71,
+        "frete_liquido": 248.42,
+        "frete_total": 293.13,
+        "previsao_entrega": "24/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0002",
+      "transportadora_id": 3,
+      "tabela_frete_id": 3,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 14000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.5,
+            "minimo": 70
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 150,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0038
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.2
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 115.0,
+        "VN3_generalidades": 108.4,
+        "VN4_sobre_frete": 26.81,
+        "VN5_icms": 45.04,
+        "frete_liquido": 250.21,
+        "frete_total": 295.25,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0002",
+      "transportadora_id": 4,
+      "tabela_frete_id": 4,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 14000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 1,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 8.5,
+            "minimo": 150
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 400,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.008
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 2.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 391.0,
+        "VN3_generalidades": 227.0,
+        "VN4_sobre_frete": 74.16,
+        "VN5_icms": 124.59,
+        "frete_liquido": 692.16,
+        "frete_total": 816.75,
+        "previsao_entrega": "17/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0002",
+      "transportadora_id": 5,
+      "tabela_frete_id": 5,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 14000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 15,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.1,
+            "minimo": 40
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 80,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0015
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 50.6,
+        "VN3_generalidades": 44.0,
+        "VN4_sobre_frete": 11.35,
+        "VN5_icms": 19.07,
+        "frete_liquido": 105.95,
+        "frete_total": 125.02,
+        "previsao_entrega": "31/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0002",
+      "transportadora_id": 6,
+      "tabela_frete_id": 6,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 14000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 4,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.2,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 140,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 101.2,
+        "VN3_generalidades": 95.0,
+        "VN4_sobre_frete": 23.54,
+        "VN5_icms": 39.55,
+        "frete_liquido": 219.74,
+        "frete_total": 259.3,
+        "previsao_entrega": "20/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0002",
+      "transportadora_id": 7,
+      "tabela_frete_id": 7,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 14000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 6,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.8,
+            "minimo": 75
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 170,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.004
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.3
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 128.8,
+        "VN3_generalidades": 115.8,
+        "VN4_sobre_frete": 29.35,
+        "VN5_icms": 49.31,
+        "frete_liquido": 273.95,
+        "frete_total": 323.26,
+        "previsao_entrega": "22/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0002",
+      "transportadora_id": 8,
+      "tabela_frete_id": 8,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 14000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 10,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 0.5,
+            "minimo": 300
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 500,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.002
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 3.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 300,
+        "VN3_generalidades": 166.0,
+        "VN4_sobre_frete": 55.92,
+        "VN5_icms": 93.95,
+        "frete_liquido": 521.92,
+        "frete_total": 615.87,
+        "previsao_entrega": "26/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0002",
+      "transportadora_id": 9,
+      "tabela_frete_id": 9,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 14000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 4.0,
+            "minimo": 30
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 60,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 184.0,
+        "VN3_generalidades": 106.8,
+        "VN4_sobre_frete": 34.9,
+        "VN5_icms": 58.63,
+        "frete_liquido": 325.7,
+        "frete_total": 384.32,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0002",
+      "transportadora_id": 10,
+      "tabela_frete_id": 10,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 14000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 7,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.4,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 145,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.1
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 110.4,
+        "VN3_generalidades": 99.6,
+        "VN4_sobre_frete": 25.2,
+        "VN5_icms": 42.34,
+        "frete_liquido": 235.2,
+        "frete_total": 277.54,
+        "previsao_entrega": "23/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0002",
+      "transportadora_id": 11,
+      "tabela_frete_id": 11,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 14000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.9,
+            "minimo": 50
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 120,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0025
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.9
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 87.4,
+        "VN3_generalidades": 76.4,
+        "VN4_sobre_frete": 19.66,
+        "VN5_icms": 33.02,
+        "frete_liquido": 183.46,
+        "frete_total": 216.48,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "MS-EMB-0002",
+      "transportadora_id": 12,
+      "tabela_frete_id": 12,
+      "entrada": {
+        "peso_bruto_kg": 19.2,
+        "volume_m3": 0.154,
+        "valor_nf": 14000.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 2,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.5,
+            "minimo": 100
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 200,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0045
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 46.2,
+        "VN2_frete_peso": 161.0,
+        "VN3_generalidades": 145.8,
+        "VN4_sobre_frete": 36.82,
+        "VN5_icms": 61.85,
+        "frete_liquido": 343.62,
+        "frete_total": 405.47,
+        "previsao_entrega": "18/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0008",
+      "transportadora_id": 1,
+      "tabela_frete_id": 1,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.001,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.0,
+            "minimo": 80
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 160,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.003
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 300.0,
+        "VN3_generalidades": 136.9,
+        "VN4_sobre_frete": 52.43,
+        "VN5_icms": 88.08,
+        "frete_liquido": 489.33,
+        "frete_total": 577.41,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0008",
+      "transportadora_id": 2,
+      "tabela_frete_id": 2,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.001,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 8,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.8,
+            "minimo": 60
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 250,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 180.0,
+        "VN3_generalidades": 211.5,
+        "VN4_sobre_frete": 46.98,
+        "VN5_icms": 78.93,
+        "frete_liquido": 438.48,
+        "frete_total": 517.41,
+        "previsao_entrega": "24/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0008",
+      "transportadora_id": 3,
+      "tabela_frete_id": 3,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.001,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.5,
+            "minimo": 70
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 150,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0038
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.2
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 250.0,
+        "VN3_generalidades": 166.74,
+        "VN4_sobre_frete": 50.01,
+        "VN5_icms": 84.01,
+        "frete_liquido": 466.75,
+        "frete_total": 550.76,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0008",
+      "transportadora_id": 4,
+      "tabela_frete_id": 4,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.001,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 1,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 8.5,
+            "minimo": 150
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 400,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.008
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 2.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 850.0,
+        "VN3_generalidades": 348.4,
+        "VN4_sobre_frete": 143.81,
+        "VN5_icms": 241.6,
+        "frete_liquido": 1342.21,
+        "frete_total": 1583.81,
+        "previsao_entrega": "17/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0008",
+      "transportadora_id": 5,
+      "tabela_frete_id": 5,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.001,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 15,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.1,
+            "minimo": 40
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 80,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0015
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 110.0,
+        "VN3_generalidades": 68.45,
+        "VN4_sobre_frete": 21.41,
+        "VN5_icms": 35.98,
+        "frete_liquido": 199.86,
+        "frete_total": 235.84,
+        "previsao_entrega": "31/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0008",
+      "transportadora_id": 6,
+      "tabela_frete_id": 6,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.001,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 4,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.2,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 140,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 220.0,
+        "VN3_generalidades": 143.05,
+        "VN4_sobre_frete": 43.57,
+        "VN5_icms": 73.19,
+        "frete_liquido": 406.62,
+        "frete_total": 479.81,
+        "previsao_entrega": "20/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0008",
+      "transportadora_id": 7,
+      "tabela_frete_id": 7,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.001,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 6,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.8,
+            "minimo": 75
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 170,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.004
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.3
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 280.0,
+        "VN3_generalidades": 179.2,
+        "VN4_sobre_frete": 55.1,
+        "VN5_icms": 92.57,
+        "frete_liquido": 514.3,
+        "frete_total": 606.88,
+        "previsao_entrega": "22/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0008",
+      "transportadora_id": 8,
+      "tabela_frete_id": 8,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.001,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 10,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 0.5,
+            "minimo": 300
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 500,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.002
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 3.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 300,
+        "VN3_generalidades": 324.6,
+        "VN4_sobre_frete": 74.95,
+        "VN5_icms": 125.92,
+        "frete_liquido": 699.55,
+        "frete_total": 825.47,
+        "previsao_entrega": "26/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0008",
+      "transportadora_id": 9,
+      "tabela_frete_id": 9,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.001,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 4.0,
+            "minimo": 30
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 60,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 400.0,
+        "VN3_generalidades": 141.5,
+        "VN4_sobre_frete": 64.98,
+        "VN5_icms": 109.17,
+        "frete_liquido": 606.48,
+        "frete_total": 715.65,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0008",
+      "transportadora_id": 10,
+      "tabela_frete_id": 10,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.001,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 7,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.4,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 145,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.1
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 240.0,
+        "VN3_generalidades": 153.05,
+        "VN4_sobre_frete": 47.17,
+        "VN5_icms": 79.24,
+        "frete_liquido": 440.22,
+        "frete_total": 519.45,
+        "previsao_entrega": "23/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0008",
+      "transportadora_id": 11,
+      "tabela_frete_id": 11,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.001,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.9,
+            "minimo": 50
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 120,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0025
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.9
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 190.0,
+        "VN3_generalidades": 120.75,
+        "VN4_sobre_frete": 37.29,
+        "VN5_icms": 62.65,
+        "frete_liquido": 348.04,
+        "frete_total": 410.69,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0008",
+      "transportadora_id": 12,
+      "tabela_frete_id": 12,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.001,
+        "valor_nf": 12300.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 2,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.5,
+            "minimo": 100
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 200,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0045
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 350.0,
+        "VN3_generalidades": 235.35,
+        "VN4_sobre_frete": 70.24,
+        "VN5_icms": 118.01,
+        "frete_liquido": 655.59,
+        "frete_total": 773.6,
+        "previsao_entrega": "18/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0009",
+      "transportadora_id": 1,
+      "tabela_frete_id": 1,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.01,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.0,
+            "minimo": 80
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 160,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.003
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 300.0,
+        "VN3_generalidades": 155.5,
+        "VN4_sobre_frete": 54.66,
+        "VN5_icms": 91.83,
+        "frete_liquido": 510.16,
+        "frete_total": 601.99,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0009",
+      "transportadora_id": 2,
+      "tabela_frete_id": 2,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.01,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 8,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.8,
+            "minimo": 60
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 250,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 180.0,
+        "VN3_generalidades": 242.5,
+        "VN4_sobre_frete": 50.7,
+        "VN5_icms": 85.18,
+        "frete_liquido": 473.2,
+        "frete_total": 558.38,
+        "previsao_entrega": "24/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0009",
+      "transportadora_id": 3,
+      "tabela_frete_id": 3,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.01,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.5,
+            "minimo": 70
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 150,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0038
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.2
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 250.0,
+        "VN3_generalidades": 190.3,
+        "VN4_sobre_frete": 52.84,
+        "VN5_icms": 88.76,
+        "frete_liquido": 493.14,
+        "frete_total": 581.9,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0009",
+      "transportadora_id": 4,
+      "tabela_frete_id": 4,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.01,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 1,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 8.5,
+            "minimo": 150
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 400,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.008
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 2.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 850.0,
+        "VN3_generalidades": 398.0,
+        "VN4_sobre_frete": 149.76,
+        "VN5_icms": 251.6,
+        "frete_liquido": 1397.76,
+        "frete_total": 1649.36,
+        "previsao_entrega": "17/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0009",
+      "transportadora_id": 5,
+      "tabela_frete_id": 5,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.01,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 15,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.1,
+            "minimo": 40
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 80,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0015
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.5
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 110.0,
+        "VN3_generalidades": 77.75,
+        "VN4_sobre_frete": 22.53,
+        "VN5_icms": 37.85,
+        "frete_liquido": 210.28,
+        "frete_total": 248.13,
+        "previsao_entrega": "31/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0009",
+      "transportadora_id": 6,
+      "tabela_frete_id": 6,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.01,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 4,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.2,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 140,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 220.0,
+        "VN3_generalidades": 164.75,
+        "VN4_sobre_frete": 46.17,
+        "VN5_icms": 77.57,
+        "frete_liquido": 430.92,
+        "frete_total": 508.49,
+        "previsao_entrega": "20/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0009",
+      "transportadora_id": 7,
+      "tabela_frete_id": 7,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.01,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 6,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.8,
+            "minimo": 75
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 170,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.004
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.3
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 280.0,
+        "VN3_generalidades": 204.0,
+        "VN4_sobre_frete": 58.08,
+        "VN5_icms": 97.57,
+        "frete_liquido": 542.08,
+        "frete_total": 639.65,
+        "previsao_entrega": "22/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0009",
+      "transportadora_id": 8,
+      "tabela_frete_id": 8,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.01,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 10,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 0.5,
+            "minimo": 300
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 500,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.002
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 3.0
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 300,
+        "VN3_generalidades": 337.0,
+        "VN4_sobre_frete": 76.44,
+        "VN5_icms": 128.42,
+        "frete_liquido": 713.44,
+        "frete_total": 841.86,
+        "previsao_entrega": "26/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0009",
+      "transportadora_id": 9,
+      "tabela_frete_id": 9,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.01,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 5,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 4.0,
+            "minimo": 30
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 60,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.005
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 400.0,
+        "VN3_generalidades": 172.5,
+        "VN4_sobre_frete": 68.7,
+        "VN5_icms": 115.42,
+        "frete_liquido": 641.2,
+        "frete_total": 756.62,
+        "previsao_entrega": "21/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0009",
+      "transportadora_id": 10,
+      "tabela_frete_id": 10,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.01,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 7,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 2.4,
+            "minimo": 65
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 145,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0035
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.1
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 240.0,
+        "VN3_generalidades": 174.75,
+        "VN4_sobre_frete": 49.77,
+        "VN5_icms": 83.61,
+        "frete_liquido": 464.52,
+        "frete_total": 548.13,
+        "previsao_entrega": "23/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0009",
+      "transportadora_id": 11,
+      "tabela_frete_id": 11,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.01,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 3,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 1.9,
+            "minimo": 50
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 120,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0025
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 0.9
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 190.0,
+        "VN3_generalidades": 136.25,
+        "VN4_sobre_frete": 39.15,
+        "VN5_icms": 65.77,
+        "frete_liquido": 365.4,
+        "frete_total": 431.17,
+        "previsao_entrega": "19/01/2026"
+      }
+    },
+    {
+      "pedido": "EMB-2026-0009",
+      "transportadora_id": 12,
+      "tabela_frete_id": 12,
+      "entrada": {
+        "peso_bruto_kg": 100.0,
+        "volume_m3": 0.01,
+        "valor_nf": 18500.0,
+        "fator_cubagem": 300,
+        "dias_coleta": 1,
+        "prazo_dias": 2,
+        "data_emissao": "2026-01-15",
+        "tarifas": {
+          "icms": 0.18,
+          "frete_peso": {
+            "arred": 0,
+            "valor": 3.5,
+            "minimo": 100
+          },
+          "sobre_frete": 0.12,
+          "minimo_geral": 200,
+          "generalidades": [
+            {
+              "max": 250,
+              "min": 10,
+              "base": "VNF",
+              "arred": 2,
+              "valor": 0.0045
+            },
+            {
+              "min": 15,
+              "base": "PPC",
+              "arred": 0,
+              "valor": 1.8
+            }
+          ]
+        }
+      },
+      "esperado": {
+        "VN1_peso_taxado": 100.0,
+        "VN2_frete_peso": 350.0,
+        "VN3_generalidades": 263.25,
+        "VN4_sobre_frete": 73.59,
+        "VN5_icms": 123.63,
+        "frete_liquido": 686.84,
+        "frete_total": 810.47,
+        "previsao_entrega": "18/01/2026"
+      }
+    }
+  ]
+}

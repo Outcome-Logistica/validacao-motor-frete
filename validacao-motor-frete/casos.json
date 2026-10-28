@@ -1,0 +1,1790 @@
+{
+  "data_referencia": "2026-10-01",
+  "tolerancia": "0.01",
+  "como_ler": "Cada caso isola um comportamento. A conta foi feita na mão antes de olhar o motor. Casos com a chave faixas exercitam preco_da_faixa(); os demais entregam a tarifa pronta a calcular(). CEP e ids de tabela existem só para a chamada fechar: não entram na conta.",
+  "casos": [
+    {
+      "id": "faixa_dentro_7kg",
+      "camada": 1,
+      "titulo": "Peso dentro da faixa (banda 0–10 kg)",
+      "peculiaridade": "Nas linhas Faixa o preço está em minimo, e valor vem vazio.",
+      "o_que_testa": "7 kg na banda 0–10 por R$ 200. O motor lê minimo, não valor.",
+      "modo": "faixa",
+      "peso": "7",
+      "faixas": {
+        "bandas": [
+          {
+            "id": 1,
+            "peso_inicio": "0",
+            "peso_fim": "10",
+            "minimo": "200.00",
+            "valor": null,
+            "tipo_calculo": "Faixa"
+          }
+        ]
+      },
+      "calculo_manual": [
+        {
+          "etapa": "Escolher banda",
+          "campo": "preco",
+          "conta": "7 kg cai em 0–10. O preço da Faixa está em minimo = 200. valor está vazio e não é lido.",
+          "resultado": "200.00"
+        }
+      ],
+      "esperado": {
+        "preco": "200.00",
+        "aplicou_excedente": false
+      },
+      "n": 1
+    },
+    {
+      "id": "faixa_limite_70kg",
+      "camada": 1,
+      "titulo": "Peso no limite da banda (70 kg)",
+      "peculiaridade": "O limite de cima conta na banda de baixo.",
+      "o_que_testa": "70 kg na banda 30–70 por R$ 161,88. Não salta pro excedente.",
+      "modo": "faixa",
+      "peso": "70",
+      "faixas": {
+        "bandas": [
+          {
+            "id": 1,
+            "peso_inicio": "0",
+            "peso_fim": "10",
+            "minimo": "80",
+            "valor": null,
+            "tipo_calculo": "Faixa"
+          },
+          {
+            "id": 2,
+            "peso_inicio": "10",
+            "peso_fim": "30",
+            "minimo": "120",
+            "valor": null,
+            "tipo_calculo": "Faixa"
+          },
+          {
+            "id": 3,
+            "peso_inicio": "30",
+            "peso_fim": "70",
+            "minimo": "161.88",
+            "valor": null,
+            "tipo_calculo": "Faixa"
+          }
+        ],
+        "excedente": {
+          "id": 9001,
+          "peso_inicio": "70",
+          "peso_fim": "99999",
+          "minimo": null,
+          "valor": "2.32",
+          "tipo_calculo": "Excedente"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "Escolher banda",
+          "campo": "preco",
+          "conta": "70 kg está no fim da banda 30–70. O limite pertence a ela. Preço = 161,88. Excedente ainda não entra.",
+          "resultado": "161.88"
+        }
+      ],
+      "esperado": {
+        "preco": "161.88",
+        "aplicou_excedente": false
+      },
+      "n": 2
+    },
+    {
+      "id": "excedente_acima_do_teto",
+      "camada": 1,
+      "titulo": "Peso acima do teto, com excedente",
+      "peculiaridade": "Acima do teto: última faixa + (peso − teto) × R$/kg. Não é peso × R$/kg.",
+      "o_que_testa": "100 kg numa tabela até 70 kg por R$ 161,88, excedente R$ 2,32/kg → 231,48. A leitura 100 × 2,32 = 232,00 está errada.",
+      "modo": "faixa",
+      "peso": "100",
+      "faixas": {
+        "bandas": [
+          {
+            "id": 3,
+            "peso_inicio": "30",
+            "peso_fim": "70",
+            "minimo": "161.88",
+            "valor": null,
+            "tipo_calculo": "Faixa"
+          }
+        ],
+        "excedente": {
+          "id": 9001,
+          "peso_inicio": "70",
+          "peso_fim": "99999",
+          "minimo": null,
+          "valor": "2.32",
+          "tipo_calculo": "Excedente"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "Última faixa",
+          "campo": null,
+          "conta": "A tabela termina em 70 kg por R$ 161,88.",
+          "resultado": "161.88"
+        },
+        {
+          "etapa": "Excesso",
+          "campo": null,
+          "conta": "(100 − 70) × 2,32 = 30 × 2,32 = 69,60.",
+          "resultado": "69.60"
+        },
+        {
+          "etapa": "Preço",
+          "campo": "preco",
+          "conta": "161,88 + 69,60 = 231,48. Não é 100 × 2,32 = 232,00.",
+          "resultado": "231.48"
+        }
+      ],
+      "esperado": {
+        "preco": "231.48",
+        "aplicou_excedente": true
+      },
+      "n": 3
+    },
+    {
+      "id": "peso_fora_sem_excedente",
+      "camada": 1,
+      "titulo": "Peso acima do teto, sem excedente",
+      "peculiaridade": "Sem excedente cadastrado, acima do teto não tem preço. O motor recusa.",
+      "o_que_testa": "500 kg numa tabela até 10 kg, sem excedente → PESO_FORA_DAS_FAIXAS. Não inventa número.",
+      "modo": "faixa",
+      "peso": "500",
+      "faixas": {
+        "bandas": [
+          {
+            "id": 1,
+            "peso_inicio": "0",
+            "peso_fim": "10",
+            "minimo": "200",
+            "valor": null,
+            "tipo_calculo": "Faixa"
+          }
+        ]
+      },
+      "calculo_manual": [
+        {
+          "etapa": "Descarte",
+          "campo": "motivo",
+          "conta": "500 kg está fora das bandas. Não há excedente. Motivo = PESO_FORA_DAS_FAIXAS.",
+          "resultado": "PESO_FORA_DAS_FAIXAS"
+        }
+      ],
+      "esperado": {
+        "motivo": "PESO_FORA_DAS_FAIXAS"
+      },
+      "n": 4
+    },
+    {
+      "id": "so_frete_peso",
+      "camada": 2,
+      "titulo": "Só o frete-peso",
+      "peculiaridade": "O preço da faixa já é um valor fechado em reais. Não é preço por quilo.",
+      "o_que_testa": "100 kg com faixa de R$ 250 tem que custar R$ 250, e não R$ 25.000.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "icms": "0",
+        "tarcli": "AD",
+        "uf_destino": "RJ",
+        "prazo_dias": 3
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "A resolução já entregou 100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "A faixa vale R$ 250 fechados. 100 × 250 seria R$ 25.000 e está errado.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "Sem fórmula. Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "(VN2 + VN3) × 0 = 0.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250 + 0 + 0 = 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "250 × 0 = 0.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "Linha frete-peso",
+          "campo": "componente FRETE_PESO",
+          "conta": "A linha da auditoria é o próprio VN2.",
+          "resultado": "250.00"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "0.00",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "250.00",
+        "frete_total": "250.00",
+        "componentes": {
+          "FRETE_PESO": "250.00"
+        },
+        "avisos": []
+      },
+      "n": 5
+    },
+    {
+      "id": "minimo_do_frete_pega",
+      "camada": 2,
+      "titulo": "O mínimo do frete-peso pega",
+      "peculiaridade": "Se a faixa fica abaixo do piso, usa o piso.",
+      "o_que_testa": "Faixa de R$ 40 com piso de R$ 77,40 cobra R$ 77,40.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "40",
+        "frete_minimo": "77.40",
+        "icms": "0",
+        "tarcli": "AD",
+        "uf_destino": "RJ",
+        "prazo_dias": 3
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "Faixa R$ 40. Piso R$ 77,40. O maior é 77,40.",
+          "resultado": "77.40"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "Sem fórmula.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "77,40.",
+          "resultado": "77.40"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "77,40.",
+          "resultado": "77.40"
+        },
+        {
+          "etapa": "Linha frete-peso",
+          "campo": "componente FRETE_PESO",
+          "conta": "R$ 77,40, com mínimo aplicado.",
+          "resultado": "77.40"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "77.40",
+        "generalidades": "0.00",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "77.40",
+        "frete_total": "77.40",
+        "componentes": {
+          "FRETE_PESO": "77.40"
+        },
+        "avisos": [],
+        "frete_peso_aplicou_minimo": true
+      },
+      "n": 6
+    },
+    {
+      "id": "minimo_do_frete_nao_pega",
+      "camada": 2,
+      "titulo": "O mínimo do frete-peso não pega",
+      "peculiaridade": "Se a faixa já está acima do piso, o piso não sobe o valor.",
+      "o_que_testa": "Faixa de R$ 250 com piso de R$ 77,40 continua R$ 250. Sem essa variante, um piso que sempre aplica também passaria.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "frete_minimo": "77.40",
+        "icms": "0",
+        "tarcli": "AD",
+        "uf_destino": "RJ",
+        "prazo_dias": 3
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "Faixa R$ 250 > piso R$ 77,40. Fica 250. Mínimo não aplicado.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "Linha frete-peso",
+          "campo": "componente FRETE_PESO",
+          "conta": "R$ 250,00.",
+          "resultado": "250.00"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "0.00",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "250.00",
+        "frete_total": "250.00",
+        "componentes": {
+          "FRETE_PESO": "250.00"
+        },
+        "avisos": [],
+        "frete_peso_aplicou_minimo": false
+      },
+      "n": 7
+    },
+    {
+      "id": "gris_percentual",
+      "camada": 2,
+      "titulo": "GRIS: o percentual ganha do piso",
+      "peculiaridade": "GRIS = maximo(5, nota × 0,002). Nota grande usa o percentual.",
+      "o_que_testa": "Nota R$ 10.000 × 0,2% = R$ 20 > piso R$ 5. GRIS = 20. Total = 270.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "icms": "0",
+        "tarcli": "AD",
+        "uf_destino": "RJ",
+        "prazo_dias": 3,
+        "formulas": {
+          "gris": "maximo(5,[fv]*0.002)",
+          "tst": "[gris]"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "R$ 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 GRIS",
+          "campo": "componente GRIS",
+          "conta": "10.000 × 0,002 = 20. max(5, 20) = 20.",
+          "resultado": "20.00"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "tst = 20.",
+          "resultado": "20.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250 + 20 = 270.",
+          "resultado": "270.00"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "270.",
+          "resultado": "270.00"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "20.00",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "270.00",
+        "frete_total": "270.00",
+        "componentes": {
+          "FRETE_PESO": "250.00",
+          "GRIS": "20.00"
+        },
+        "avisos": []
+      },
+      "n": 8
+    },
+    {
+      "id": "gris_piso",
+      "camada": 2,
+      "titulo": "GRIS: o piso ganha do percentual",
+      "peculiaridade": "A mesma fórmula. Nota pequena cai no piso de R$ 5.",
+      "o_que_testa": "Nota R$ 1.000 × 0,2% = R$ 2. max(5, 2) = 5. Total = 255.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "1000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "icms": "0",
+        "tarcli": "AD",
+        "uf_destino": "RJ",
+        "prazo_dias": 3,
+        "formulas": {
+          "gris": "maximo(5,[fv]*0.002)",
+          "tst": "[gris]"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "R$ 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 GRIS",
+          "campo": "componente GRIS",
+          "conta": "1.000 × 0,002 = 2. max(5, 2) = 5.",
+          "resultado": "5.00"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "tst = 5.",
+          "resultado": "5.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250 + 5 = 255.",
+          "resultado": "255.00"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "255.",
+          "resultado": "255.00"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "5.00",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "255.00",
+        "frete_total": "255.00",
+        "componentes": {
+          "FRETE_PESO": "250.00",
+          "GRIS": "5.00"
+        },
+        "avisos": []
+      },
+      "n": 9
+    },
+    {
+      "id": "gris_e_despacho",
+      "camada": 2,
+      "titulo": "GRIS e despacho em linhas separadas",
+      "peculiaridade": "Duas taxas somam, mas voltam cada uma na sua linha.",
+      "o_que_testa": "GRIS R$ 20 + despacho R$ 15 = 35. Linhas GRIS e CTRC existem separadas.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "icms": "0",
+        "tarcli": "AD",
+        "uf_destino": "RJ",
+        "prazo_dias": 3,
+        "formulas": {
+          "gris": "maximo(5,[fv]*0.002)",
+          "ctrc": "1*15",
+          "tst": "[gris]+[ctrc]"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "R$ 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 GRIS",
+          "campo": "componente GRIS",
+          "conta": "10.000 × 0,002 = 20.",
+          "resultado": "20.00"
+        },
+        {
+          "etapa": "VN3 despacho",
+          "campo": "componente CTRC",
+          "conta": "1 × 15 = 15.",
+          "resultado": "15.00"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "20 + 15 = 35.",
+          "resultado": "35.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250 + 35 = 285.",
+          "resultado": "285.00"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "285.",
+          "resultado": "285.00"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "35.00",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "285.00",
+        "frete_total": "285.00",
+        "componentes": {
+          "FRETE_PESO": "250.00",
+          "GRIS": "20.00",
+          "CTRC": "15.00"
+        },
+        "avisos": []
+      },
+      "n": 10
+    },
+    {
+      "id": "tarcli_liga",
+      "camada": 2,
+      "titulo": "tarcli liga a cobrança de pallet",
+      "peculiaridade": "A letra P no tarcli liga a fórmula. Sem ela, a cobrança some.",
+      "o_que_testa": "tarcli ADP, 2 pallets → 2 × 29,68 = 59,36.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4,
+        "quantidade_pallets": 2
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "icms": "0",
+        "tarcli": "ADP",
+        "uf_destino": "RJ",
+        "prazo_dias": 3,
+        "formulas": {
+          "pallet": "se(contem('P',[tarcli]),[pallets]*29.68,0)",
+          "tst": "[pallet]"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "R$ 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 pallet",
+          "campo": "componente PALLET",
+          "conta": "tarcli ADP contém P. 2 × 29,68 = 59,36.",
+          "resultado": "59.36"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "59,36.",
+          "resultado": "59.36"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250 + 59,36 = 309,36.",
+          "resultado": "309.36"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "309,36.",
+          "resultado": "309.36"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "59.36",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "309.36",
+        "frete_total": "309.36",
+        "componentes": {
+          "FRETE_PESO": "250.00",
+          "PALLET": "59.36"
+        },
+        "avisos": []
+      },
+      "n": 11
+    },
+    {
+      "id": "tarcli_desliga",
+      "camada": 2,
+      "titulo": "tarcli desliga a cobrança de pallet",
+      "peculiaridade": "Mesma fórmula e mesmos pallets. Sem a letra P, cobra zero.",
+      "o_que_testa": "tarcli AD, 2 pallets → pallet = 0. Total = 250.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4,
+        "quantidade_pallets": 2
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "icms": "0",
+        "tarcli": "AD",
+        "uf_destino": "RJ",
+        "prazo_dias": 3,
+        "formulas": {
+          "pallet": "se(contem('P',[tarcli]),[pallets]*29.68,0)",
+          "tst": "[pallet]"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "R$ 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 pallet",
+          "campo": "componente PALLET",
+          "conta": "tarcli AD não contém P. Fórmula devolve 0.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "0.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "250.",
+          "resultado": "250.00"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "0.00",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "250.00",
+        "frete_total": "250.00",
+        "componentes": {
+          "FRETE_PESO": "250.00",
+          "PALLET": "0.00"
+        },
+        "avisos": []
+      },
+      "n": 12
+    },
+    {
+      "id": "pallet_informado",
+      "camada": 2,
+      "titulo": "Pallet com a quantidade informada",
+      "peculiaridade": "40 volumes em 2 pallets. A fórmula usa o campo de pallets, não o de volumes.",
+      "o_que_testa": "2 × 29,68 = 59,36. Se usasse 40 volumes, cobraria R$ 1.187,20.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 40,
+        "quantidade_pallets": 2
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "icms": "0",
+        "tarcli": "P",
+        "uf_destino": "RJ",
+        "prazo_dias": 3,
+        "formulas": {
+          "pallet": "se(contem('P',[tarcli]),[pallets]*29.68,0)",
+          "tst": "[pallet]"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "R$ 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 pallet",
+          "campo": "componente PALLET",
+          "conta": "2 pallets × 29,68 = 59,36. Não é 40 × 29,68.",
+          "resultado": "59.36"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "59,36.",
+          "resultado": "59.36"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250 + 59,36 = 309,36.",
+          "resultado": "309.36"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "309,36. Sem aviso.",
+          "resultado": "309.36"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "59.36",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "309.36",
+        "frete_total": "309.36",
+        "componentes": {
+          "FRETE_PESO": "250.00",
+          "PALLET": "59.36"
+        },
+        "avisos": []
+      },
+      "n": 13
+    },
+    {
+      "id": "pallet_estimado",
+      "camada": 2,
+      "titulo": "Pallet estimado pelos volumes",
+      "peculiaridade": "Sem quantidade de pallets, o motor usa volumes e avisa PALLETS_ESTIMADOS.",
+      "o_que_testa": "4 volumes, pallets em branco → 4 × 29,68 = 118,72. Tem que ter o aviso.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "icms": "0",
+        "tarcli": "ADP",
+        "uf_destino": "RJ",
+        "prazo_dias": 3,
+        "formulas": {
+          "pallet": "se(contem('P',[tarcli]),[pallets]*29.68,0)",
+          "tst": "[pallet]"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "R$ 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 pallet",
+          "campo": "componente PALLET",
+          "conta": "Pallets em branco → usa 4 volumes. 4 × 29,68 = 118,72.",
+          "resultado": "118.72"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "118,72.",
+          "resultado": "118.72"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250 + 118,72 = 368,72.",
+          "resultado": "368.72"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "368,72. Aviso PALLETS_ESTIMADOS.",
+          "resultado": "368.72"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "118.72",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "368.72",
+        "frete_total": "368.72",
+        "componentes": {
+          "FRETE_PESO": "250.00",
+          "PALLET": "118.72"
+        },
+        "avisos": [
+          "PALLETS_ESTIMADOS"
+        ]
+      },
+      "n": 14
+    },
+    {
+      "id": "pedagio_rj",
+      "camada": 2,
+      "titulo": "Pedágio no Rio de Janeiro",
+      "peculiaridade": "A fórmula só cobra se a UF está na lista. Peso em frações de 100 kg.",
+      "o_que_testa": "Destino RJ, 100 kg → 1 fração × R$ 7 = R$ 7. Total = 257.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "icms": "0",
+        "tarcli": "AD",
+        "uf_destino": "RJ",
+        "prazo_dias": 3,
+        "formulas": {
+          "pedagio": "se(contem([ufdest],'DF, RJ, SP, MT'),arredondar_para_cima0([peso_para_calculo]/100)*7,0)",
+          "tst": "[pedagio]"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "R$ 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 pedágio",
+          "campo": "componente PEDAGIO",
+          "conta": "RJ na lista. arredondar_para_cima0(100/100) = 1. 1 × 7 = 7.",
+          "resultado": "7.00"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "7.",
+          "resultado": "7.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250 + 7 = 257.",
+          "resultado": "257.00"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "257.",
+          "resultado": "257.00"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "7.00",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "257.00",
+        "frete_total": "257.00",
+        "componentes": {
+          "FRETE_PESO": "250.00",
+          "PEDAGIO": "7.00"
+        },
+        "avisos": []
+      },
+      "n": 15
+    },
+    {
+      "id": "pedagio_ba",
+      "camada": 2,
+      "titulo": "Pedágio fora da lista de estados",
+      "peculiaridade": "A mesma fórmula. UF fora da lista → pedágio zero.",
+      "o_que_testa": "Destino BA → pedágio = 0. Total = 250.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "40000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "icms": "0",
+        "tarcli": "AD",
+        "uf_destino": "BA",
+        "prazo_dias": 3,
+        "formulas": {
+          "pedagio": "se(contem([ufdest],'DF, RJ, SP, MT'),arredondar_para_cima0([peso_para_calculo]/100)*7,0)",
+          "tst": "[pedagio]"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "R$ 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 pedágio",
+          "campo": "componente PEDAGIO",
+          "conta": "BA fora da lista. Fórmula devolve 0.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "0.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "250.",
+          "resultado": "250.00"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "0.00",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "250.00",
+        "frete_total": "250.00",
+        "componentes": {
+          "FRETE_PESO": "250.00",
+          "PEDAGIO": "0.00"
+        },
+        "avisos": []
+      },
+      "n": 16
+    },
+    {
+      "id": "pedagio_rj_101kg",
+      "camada": 2,
+      "titulo": "Pedágio: fração incompleta arredonda pra cima",
+      "peculiaridade": "101 kg no RJ viram 2 frações de 100 kg, não 1.",
+      "o_que_testa": "arredondar_para_cima0(101/100) = 2. 2 × 7 = 14. Total = 264.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "101",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "101",
+        "preco_frete_peso": "250",
+        "icms": "0",
+        "tarcli": "AD",
+        "uf_destino": "RJ",
+        "prazo_dias": 3,
+        "formulas": {
+          "pedagio": "se(contem([ufdest],'DF, RJ, SP, MT'),arredondar_para_cima0([peso_para_calculo]/100)*7,0)",
+          "tst": "[pedagio]"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "101 kg.",
+          "resultado": "101.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "R$ 250 (preço já fechado).",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 pedágio",
+          "campo": "componente PEDAGIO",
+          "conta": "arredondar_para_cima0(101/100) = 2. 2 × 7 = 14.",
+          "resultado": "14.00"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "14.",
+          "resultado": "14.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250 + 14 = 264.",
+          "resultado": "264.00"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "264.",
+          "resultado": "264.00"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "101.00",
+        "frete_peso": "250.00",
+        "generalidades": "14.00",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "264.00",
+        "frete_total": "264.00",
+        "componentes": {
+          "FRETE_PESO": "250.00",
+          "PEDAGIO": "14.00"
+        },
+        "avisos": []
+      },
+      "n": 17
+    },
+    {
+      "id": "peso_cubado",
+      "camada": 2,
+      "titulo": "Peso cubado no lugar do peso real",
+      "peculiaridade": "peso_taxado entra zerado pro motor calcular max(peso, m³ × fator).",
+      "o_que_testa": "100 kg reais, 1 m³ × 300 = 300 kg cubados. Peso taxado = 300. Preço fechado continua R$ 250.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "1",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "0",
+        "preco_frete_peso": "250",
+        "fator_cubagem": "300",
+        "icms": "0",
+        "tarcli": "AD",
+        "uf_destino": "RJ",
+        "prazo_dias": 3
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "max(100, 1 × 300) = max(100, 300) = 300. O motor calcula porque peso_taxado entrou zero.",
+          "resultado": "300.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "Preço fechado da faixa = 250. Não multiplica 300 × 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "250. O peso taxado mudou, o dinheiro não.",
+          "resultado": "250.00"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "300.00",
+        "frete_peso": "250.00",
+        "generalidades": "0.00",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "250.00",
+        "frete_total": "250.00",
+        "componentes": {
+          "FRETE_PESO": "250.00"
+        },
+        "avisos": []
+      },
+      "n": 18
+    },
+    {
+      "id": "icms_12",
+      "camada": 2,
+      "titulo": "ICMS de 12% sobre o líquido",
+      "peculiaridade": "O ICMS entra em cima de frete-peso + generalidades, não só do frete-peso.",
+      "o_que_testa": "Líquido 300 × 0,12 = 36. Total = 336. Não é 250 × 0,12 = 30.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "icms": "0.12",
+        "tarcli": "AD",
+        "uf_destino": "RJ",
+        "prazo_dias": 3,
+        "formulas": {
+          "gris": "1*50",
+          "tst": "[gris]"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "R$ 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 GRIS",
+          "campo": "componente GRIS",
+          "conta": "1 × 50 = 50.",
+          "resultado": "50.00"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "50.",
+          "resultado": "50.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250 + 50 = 300. Essa é a base do imposto.",
+          "resultado": "300.00"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "300 × 0,12 = 36. Não é 250 × 0,12.",
+          "resultado": "36.00"
+        },
+        {
+          "etapa": "Linha ICMS",
+          "campo": "componente ICMS",
+          "conta": "R$ 36,00.",
+          "resultado": "36.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "300 + 36 = 336.",
+          "resultado": "336.00"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "50.00",
+        "sobre_frete": "0.00",
+        "icms": "36.00",
+        "frete_liquido": "300.00",
+        "frete_total": "336.00",
+        "componentes": {
+          "FRETE_PESO": "250.00",
+          "GRIS": "50.00",
+          "ICMS": "36.00"
+        },
+        "avisos": []
+      },
+      "n": 19
+    },
+    {
+      "id": "ad_valorem",
+      "camada": 2,
+      "titulo": "Ad valorem que vem da faixa, não da fórmula",
+      "peculiaridade": "0,32% da nota vem da linha AdValore da tarifa. O perfil não tem a fórmula adv.",
+      "o_que_testa": "10.000 × 0,0032 = 32. Total = 282.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "icms": "0",
+        "ad_valorem": "0.0032",
+        "tarcli": "AD",
+        "uf_destino": "RJ",
+        "prazo_dias": 3
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "R$ 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 ad valorem",
+          "campo": "componente ADVALORE",
+          "conta": "10.000 × 0,0032 = 32.",
+          "resultado": "32.00"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "32.",
+          "resultado": "32.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250 + 32 = 282.",
+          "resultado": "282.00"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "282.",
+          "resultado": "282.00"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "32.00",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "282.00",
+        "frete_total": "282.00",
+        "componentes": {
+          "FRETE_PESO": "250.00",
+          "ADVALORE": "32.00"
+        },
+        "avisos": []
+      },
+      "n": 20
+    },
+    {
+      "id": "reentrega_fora_do_total",
+      "camada": 2,
+      "titulo": "Reentrega calculada e fora do total",
+      "peculiaridade": "Reentrega, devolução e fluvial são eventuais: calculadas, não somadas.",
+      "o_que_testa": "GRIS 100 entra. Reentrega = 50 fica de fora. Total = 350, não 400.",
+      "modo": "calculo",
+      "embarque": {
+        "origem_cep": "60000000",
+        "destino_cep": "20000000",
+        "peso_bruto_kg": "100",
+        "volume_m3": "0",
+        "valor_nf": "10000",
+        "quantidade_volumes": 4
+      },
+      "tarifa": {
+        "transportadora": "JAMEF",
+        "peso_taxado": "100",
+        "preco_frete_peso": "250",
+        "icms": "0",
+        "tarcli": "AD",
+        "uf_destino": "RJ",
+        "prazo_dias": 3,
+        "formulas": {
+          "gris": "1*100",
+          "tst": "[gris]",
+          "reentrega": "[tst]*0.5"
+        }
+      },
+      "calculo_manual": [
+        {
+          "etapa": "VN1 peso taxado",
+          "campo": "peso_taxado_kg",
+          "conta": "100 kg.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN2 frete-peso",
+          "campo": "frete_peso",
+          "conta": "R$ 250.",
+          "resultado": "250.00"
+        },
+        {
+          "etapa": "VN3 GRIS",
+          "campo": "componente GRIS",
+          "conta": "100. Entra no total.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "VN3 generalidades",
+          "campo": "generalidades",
+          "conta": "tst = 100. Reentrega não está no tst.",
+          "resultado": "100.00"
+        },
+        {
+          "etapa": "Eventual reentrega",
+          "campo": "eventual reentrega",
+          "conta": "tst × 0,5 = 50. Calculada à parte.",
+          "resultado": "50.00"
+        },
+        {
+          "etapa": "VN4 sobre-frete",
+          "campo": "sobre_frete",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "Líquido",
+          "campo": "frete_liquido",
+          "conta": "250 + 100 = 350. Os R$ 50 não entram.",
+          "resultado": "350.00"
+        },
+        {
+          "etapa": "VN5 ICMS",
+          "campo": "icms",
+          "conta": "Zero.",
+          "resultado": "0.00"
+        },
+        {
+          "etapa": "VN6 total",
+          "campo": "frete_total",
+          "conta": "350, e não 400.",
+          "resultado": "350.00"
+        }
+      ],
+      "esperado": {
+        "peso_taxado_kg": "100.00",
+        "frete_peso": "250.00",
+        "generalidades": "100.00",
+        "sobre_frete": "0.00",
+        "icms": "0.00",
+        "frete_liquido": "350.00",
+        "frete_total": "350.00",
+        "componentes": {
+          "FRETE_PESO": "250.00",
+          "GRIS": "100.00"
+        },
+        "eventuais": {
+          "reentrega": "50.00"
+        },
+        "avisos": []
+      },
+      "n": 21
+    }
+  ]
+}
